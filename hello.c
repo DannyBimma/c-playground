@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 int main() 
 {
@@ -18,28 +19,35 @@ int main()
     fgets(res, sizeof(res), stdin);
     res[strcspn(res, "\n")] = '\0';
     
-    // Check for positive or negative res val
-    if (strcmp(res, "yes") == 0 || strcmp(res, "Yes") == 0 || strcmp(res, "YES") == 0 || strcmp(res, "y") == 0 || strcmp(res, "Y") == 0)
+    // Convert input to lowercase
+    for (int i = 0; res[i]; i++) 
     {
-        resVal = 0;
-    }
-    else if (strcmp(res, "no") == 0 || strcmp(res, "No") == 0 || strcmp(res, "NO") == 0 || strcmp(res, "n") == 0 || strcmp(res, "N") == 0)
-    {
-        resVal = 1;
-    }
-    else
-    {
-        printf("Invalid Response !!");
+        res[i] = tolower(res[i]);
     }
 
-    // Print msg for pos res
-    if(resVal == 0)
+    // Validate res
+    if (strcmp(res, "yes") == 0 || strcmp(res, "y") == 0) 
     {
-        printf("Welcome to the Matrix, my friend. We've been expecting you 😎 !!\n");
+        resVal = 1;
+    } 
+    else if (strcmp(res, "no") == 0 || strcmp(res, "n") == 0) 
+    {
+        resVal = 0;
+    } 
+    else 
+    {
+        printf("Invalid Response !!\n");
+        return 1;
+    }
+
+    // Print custom msg for res
+    if(resVal == 1)
+    {
+        printf("Welcome to the Matrix, %s. We've been expecting you 😎 !!\n", name);
     }
     else
     {
-        printf("You are not ready. You remain blind. Sad to see 😔 !!\n");
+        printf("You are not ready, %s. You remain blind. Sad to see 😔 !!\n", name);
     }
     
     return 0;
