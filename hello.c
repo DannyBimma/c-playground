@@ -3,27 +3,19 @@
 
 int main() 
 {
-    // Init input strings (50 and 4 chars max)
-    char name[50];
+    char name[50]; // Init input strings (50 and 4 chars max)
     char res[4];
-
-    // Set res val
-    int resVal;
-
-    // Get user input for name  
-    printf("Enter your name: ");
-    // Read chars (49 max) from std input
-    fgets(name, 50, stdin);  
-    
-    // Remove the trailing newline from fgets
-    name[strcspn(name, "\n")] = '\0';
+    int resVal = -1; // Init res val
+  
+    printf("Enter your name: "); // Get user input
+    fgets(name, sizeof(name), stdin); // Read chars (49 max) from std input
+    name[strcspn(name, "\n")] = '\0'; // Remove new line from fgets
     
     printf("Hello, %s!\n", name);
 
-    // Ask user the question and format res
+    // Ask user the question and format input
     printf("Do you believe? \n");
-    fgets(res, 4, stdin);
-
+    fgets(res, sizeof(res), stdin);
     res[strcspn(res, "\n")] = '\0';
     
     // Check for positive or negative res val
