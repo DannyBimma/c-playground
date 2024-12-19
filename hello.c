@@ -7,7 +7,6 @@ int main()
     char name[50];
     char res[4];
 
-  
   // Get and format inital user input
     printf("Enter your name: "); 
 
