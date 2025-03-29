@@ -1,33 +1,31 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-
-// Function to check if a string contains only digits
-int is_digits_only(const char *str) {
-    while (*str) {
-        if (!isdigit(*str)) {
-            return 0;
-        }
-        str++;
-    }
-    return 1;
-}
+#include <cs50.h>
 
 // Function to implement Luhn's Algorithm
-int luhn_check(const char *number) {
-    int len = strlen(number);
+bool luhns_algo(long card_num)
+{
     int sum = 0;
-    int is_second = 0;
+    bool is_second = false;
     
-    // Start from the rightmost digit
-    for (int i = len - 1; i >= 0; i--) {
-        int digit = number[i] - '0';
+    // Convert long to string for easier manipulation
+    char num_str[20];
+    sprintf(num_str, "%ld", card_num);
+    int num_len = strlen(num_str);
+    
+    // Iterate from right to left
+    for (int i = num_len - 1; i >= 0; i--)
+    {
+        int digit = num_str[i] - '0';  // Convert char to int
         
-        if (is_second) {
+        if (is_second)
+        {
             digit *= 2;
-            // If product is two digits, add digits separately
+            // Add digits separately for two-digit results
             sum += (digit % 10) + (digit / 10);
-        } else {
+        }
+        else
+        {
             sum += digit;
         }
         
@@ -38,47 +36,49 @@ int luhn_check(const char *number) {
 }
 
 // Function to determine card type
-const char* get_card_type(const char *number) {
-    int len = strlen(number);
+string card_checker(long num)
+{
+    // Convert long to string for easier manipulation
+    char num_str[20];
+    sprintf(num_str, "%ld", num);
+    int len = strlen(num_str);
     
     // Check American Express
-    if (len == 15 && (strncmp(number, "34", 2) == 0 || strncmp(number, "37", 2) == 0)) {
+    if (len == 15 && (strncmp(num_str, "34", 2) == 0 || strncmp(num_str, "37", 2) == 0))
+    {
         return "AMEX";
     }
     
     // Check MasterCard
-    if (len == 16 && number[0] == '5' && number[1] >= '1' && number[1] <= '5') {
+    if (len == 16 && num_str[0] == '5' && num_str[1] >= '1' && num_str[1] <= '5')
+    {
         return "MASTERCARD";
     }
     
     // Check Visa
-    if ((len == 13 || len == 16) && number[0] == '4') {
+    if ((len == 13 || len == 16) && num_str[0] == '4')
+    {
         return "VISA";
     }
     
     return "INVALID";
 }
 
-int main(void) {
-    char number[20];
-    
-    printf("Number: ");
-    scanf("%s", number);
-    
-    // Check if input contains only digits
-    if (!is_digits_only(number)) {
-        printf("INVALID\n");
-        return 0;
-    }
+int main(void)
+{
+    // Get input using CS50's get_long
+    long card_num = get_long("Number: ");
     
     // Check if number is valid using Luhn's Algorithm
-    if (!luhn_check(number)) {
+    if (!luhns_algo(card_num))
+    {
         printf("INVALID\n");
         return 0;
     }
     
     // Determine and print card type
-    printf("%s\n", get_card_type(number));
+    string card_type = card_checker(card_num);
+    printf("%s\n", card_type);
     
     return 0;
 }
