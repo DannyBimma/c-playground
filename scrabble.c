@@ -3,37 +3,13 @@
 #include <string.h>
 #include <ctype.h>
 
-// Letter values
-int const A = 1;
-int const B = 3;
-int const C = 3;
-int const D = 2;
-int const E = 1;
-int const F = 4;
-int const G = 2;
-int const H = 4;
-int const I = 1;
-int const J = 8;
-int const K = 5;
-int const L = 1;
-int const M = 3;
-int const N = 1;
-int const O = 1;
-int const P = 3;
-int const Q = 10;
-int const R = 1;
-int const S = 1;
-int const T = 1;
-int const U = 1;
-int const V = 4;
-int const W = 4;
-int const X = 8;
-int const Y = 4;
-int const Z = 10;
+// Scrabble letter values
+int letter_val_arr[26] = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
 
 int main(void)
 {
-    int score = 0;
+    int player_1_score = 0;
+    int player_2_score = 0;
 
     // Get user input
     string word_1 = get_string("Player 1: ");
@@ -49,6 +25,34 @@ int main(void)
         word_2[i] = toupper(word_2[i]);
     }
 
-    
+    // Calculate score for each word
+    for (int i = 0; i < strlen(word_1); i++)
+    {
+        if (isalpha(word_1[i]))
+        {
+            player_1_score += letter_val_arr[word_1[i] - 'A'];
+        }
+
+        if (isalpha(word_2[i]))
+        {
+            player_2_score += letter_val_arr[word_2[i] - 'A'];
+        }
+    } 
+
+    // Print scores
+    if (player_1_score > player_2_score)
+    {
+        printf("Player 1 wins!\n");
+    }
+    else if (player_2_score > player_1_score)
+    {
+        printf("Player 2 wins!\n");
+    }
+    else
+    {
+        printf("Tie!\n");
+    }
+
+    return 0;
 
 }
