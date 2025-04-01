@@ -1,8 +1,8 @@
 #include <stdio.h>
+#include <cs50.h>
+// int get_int(const char *input);
 
-int get_int(const char *input);
 
-// Fix the logic memory mess in this pile of shit later, bro 🙄!! 
 int main(void)
 {
     int arr_len = get_int("How many numbers would you like to average? \n");
@@ -20,13 +20,4 @@ int main(void)
     printf("The average of those numbers is: %i\n", avg);
 
     return 0;
-}
-
-int get_int(const char *input)
-{
-    int num;
-    printf("%s", input);
-    scanf("%d", &num);
-    
-    return num;
 }
