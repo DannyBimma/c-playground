@@ -33,5 +33,22 @@ int const Z = 10;
 
 int main(void)
 {
+    int score = 0;
+
+    // Get user input
+    string word_1 = get_string("Player 1: ");
+    string word_2 = get_string("Player 2: ");
+
+    // Convert to uppercase
+    for (int i = 0; i < strlen(word_1); i++)
+    {
+        word_1[i] = toupper(word_1[i]);
+    }
+    for (int i = 0; i < strlen(word_2); i++)
+    {
+        word_2[i] = toupper(word_2[i]);
+    }
+
+    
 
 }
