@@ -2,7 +2,6 @@
 #include <cs50.h>
 // int get_int(const char *input);
 
-
 int main(void)
 {
     int arr_len = get_int("How many numbers would you like to average? \n");
@@ -15,9 +14,7 @@ int main(void)
         num_sum += avg_arr[i];
     }
 
-    int avg = num_sum / arr_len;
-
-    printf("The average of those numbers is: %i\n", avg);
+    printf("The average of those numbers is: %i\n", num_sum / arr_len);
 
     return 0;
 }
