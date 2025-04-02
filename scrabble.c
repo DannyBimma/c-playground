@@ -32,12 +32,15 @@ int main(void)
         {
             player_1_score += letter_val_arr[word_1[i] - 'A'];
         }
+    }
 
+    for (int i = 0; i < strlen(word_2); i++)
+    {
         if (isalpha(word_2[i]))
         {
             player_2_score += letter_val_arr[word_2[i] - 'A'];
         }
-    } 
+    }
 
     // Print scores
     if (player_1_score > player_2_score)
