@@ -9,23 +9,22 @@ char rotate(char p, int k);
 
 int main(int argc, string argv[])
 {
-    // only run program if user inputs a single valid command-line argument
+    // Input validation
     if (argc != 2 || !digits(argv[1]))
     {
         printf("Usage: ./caesar key\n");
         return 1;
     }
 
-    // convert input arg to an int cipher key
+    // Convert input arg to int
     int k = atoi(argv[1]);
 
-    // prompt user for plaintext input
     string plaintext = get_string("plaintext:  ");
 
-    // print ciphertext label
+    // Label
     printf("ciphertext: ");
 
-    // rotate and print each char in plaintext by cihper key positions
+    // Rotate and print each char in plaintext using key
     for (int i = 0, l = strlen(plaintext); i < l; i++)
     {
         printf("%c", rotate(plaintext[i], k));
@@ -35,47 +34,35 @@ int main(int argc, string argv[])
     return 0;
 }
 
-// create function to check if input arg is all digits
+// Check if input arg is all digits
 bool digits(string arg)
 {
-    bool str_stat;
-
-    // loop over the string & check if each char is a digit
     for (int i = 0, l = strlen(arg); i < l; i++)
     {
-        if (isdigit(arg[i]))
+        if (!isdigit(arg[i]))
         {
-            str_stat = true;
-        }
-        else
-        {
-            str_stat = false;
+            return false;
         }
     }
 
-    return str_stat;
+    return true;
 }
 
-// create function to increase an input char by an input int places in ASCII
-// function should wrap around in an alphabetical index
+// Rotate and wrap chars by key
 char rotate(char p, int k)
 {
-    char c;
-
     if (isupper(p))
     {
-        c = (p - 'A' + k) % 26;
-        return c + 'A';
+        // Rotate uppercase letter and return
+        return ((p - 'A' + k) % 26) + 'A';
     }
     else if (islower(p))
     {
-        c = (p - 'a' + k) % 26;
-        return c + 'a';
+        // Rotate lowercase letter and return
+        return ((p - 'a' + k) % 26) + 'a';
     }
     else
     {
-        c = p;
+        return p;
     }
-
-    return c;
 }
