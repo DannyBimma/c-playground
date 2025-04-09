@@ -62,7 +62,7 @@ bool validate_key(string key)
         freq[index]++;
     }
 
-    return true; // Key is valid
+    return true;
 }
 
 string encrypt_text(string plaintext, string key)
