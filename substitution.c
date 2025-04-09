@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 bool validate_key(string key);
-char *encrypt_text(string plaintext, string key);
+string encrypt_text(string plaintext, string key);
 
 int main(int argc, string argv[])
 {
@@ -16,35 +16,30 @@ int main(int argc, string argv[])
         return 1;
     }
 
+    // Get and validate key
     string key = argv[1];
 
-    // Validate the key
     if (!validate_key(key))
     {
         printf("Invalid: Please run program by providing a 26 alphabetical character key.\n");
         return 1;
     }
 
+    // Get plaintext, encrypt, and print ciphertext
     string plaintext = get_string("plaintext:  ");
 
-    // Encrypt the plaintext
-    char *ciphertext = encrypt_text(plaintext, key);
+    string ciphertext = encrypt_text(plaintext, key);
 
-    // Print the ciphertext
     printf("ciphertext: %s\n", ciphertext);
-
-    // Free allocated memory for ciphertext
-    free(ciphertext);
 
     return 0;
 }
 
-// Function to validate the key
 bool validate_key(string key)
 {
     int n = strlen(key);
 
-    // Check if the key length is 26
+    // Check how long that thang is 😉
     if (n != 26)
     {
         return false;
@@ -56,31 +51,24 @@ bool validate_key(string key)
     {
         if (!isalpha(key[i]))
         {
-            return false; // Not an alphabetic character
+            return false; // Not an alphabetic char
         }
         int index = toupper(key[i]) - 'A';
         if (freq[index] > 0)
         {
-            return false; // Duplicate character found
+            return false; // Duplicate char found
         }
+
         freq[index]++;
     }
 
     return true; // Key is valid
 }
 
-// Function to encrypt the text using the substitution key
-char *encrypt_text(string plaintext, string key)
+string encrypt_text(string plaintext, string key)
 {
     int n = strlen(plaintext);
-    // Allocate memory for the ciphertext (+1 for the null terminator)
-    char *ciphertext = malloc((n + 1) * sizeof(char));
-    if (ciphertext == NULL)
-    {
-        // Handle memory allocation failure if necessary
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(1); // Exit if memory cannot be allocated
-    }
+    string ciphertext = plaintext;
 
     for (int i = 0; i < n; i++)
     {
@@ -88,12 +76,10 @@ char *encrypt_text(string plaintext, string key)
         {
             // Preserve case
             bool is_upper = isupper(plaintext[i]);
-            int index = toupper(plaintext[i]) - 'A'; // Get 0-based index (A=0, B=1, ...)
+            int index = toupper(plaintext[i]) - 'A'; // 0-based index
 
-            // Get the substituted character from the key
+            // Substitute chars using key and maintain case
             char substituted_char = key[index];
-
-            // Apply original case
             ciphertext[i] = is_upper ? toupper(substituted_char) : tolower(substituted_char);
         }
         else
@@ -102,7 +88,6 @@ char *encrypt_text(string plaintext, string key)
             ciphertext[i] = plaintext[i];
         }
     }
-    ciphertext[n] = '\0'; // Null-terminate the ciphertext string
 
     return ciphertext;
 }
