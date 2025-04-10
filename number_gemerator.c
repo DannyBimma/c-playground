@@ -1,6 +1,6 @@
+#include <cs50.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <cs50.h>
 
 int main(int argc, string argv[])
 {
@@ -13,36 +13,36 @@ int main(int argc, string argv[])
     int size = atoi(argv[1]);
 
     // First half (increasing)
-    for (int i = 1; i <= size; i++)
+    for (int row = 1; row <= size; row++)
     {
-        // Print spaces
-        for (int j = size; j > i; j--)
+        // Leading spaces
+        for (int space = 1; space <= size - row; space++)
         {
             printf(" ");
         }
 
-        // Print numbers
-        for (int k = 1; k <= i * 2 - 1; k++)
+        // Numbers in ascending order
+        for (int num = 1; num <= row * 2 - 1; num++)
         {
-            printf("%d", k);
+            printf("%d", num % 10); // Maintain shape with larger numbers
         }
 
         printf("\n");
     }
 
     // Second half (decreasing)
-    for (int i = 1; i <= size - 1; i++)
+    for (int row = 1; row <= size - 1; row++)
     {
-        // Print spaces
-        for (int j = 1; j <= i; j++)
+        // Leading spaces
+        for (int space = 1; space <= row; space++)
         {
             printf(" ");
         }
 
-        // Print numbers
-        for (int k = 1; k <= (size - i) * 2 - 1; k++)
+        // Numbers in ascending order
+        for (int num = 1; num <= (size - row) * 2 - 1; num++)
         {
-            printf("%d", k);
+            printf("%d", num % 10);
         }
 
         printf("\n");
