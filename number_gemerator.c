@@ -1,8 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <cs50.h>
 
-int main()
+int main(int argc, string argv[])
 {
-    int size = 5;
+    if (argc != 2)
+    {
+        printf("Usage: ./number_gemerator size of gem\n");
+        return 1;
+    }
+
+    int size = atoi(argv[1]);
 
     // First half (increasing)
     for (int i = 1; i <= size; i++)
