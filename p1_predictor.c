@@ -34,6 +34,16 @@ typedef struct
     int predictedPosition;
 } Driver;
 
+// Function prototypes
+void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount);
+void calculatePoints(Driver drivers[], int driverCount, const char *track, const char *condition);
+void calculatePercentages(Driver drivers[], int driverCount);
+void predictPositions(Driver drivers[], int driverCount);
+void printResults(Driver drivers[], int driverCount, const char *track, const char *condition);
+bool isStringInArray(const char *str, const char *array[], int size);
+void toLowercase(char *str);
+void usageInstructions();
+
 // Top teams and drivers
 const char *topTeams[] = {"McLaren", "Ferrari", "Red Bull", "Mercedes", "Williams"};
 const char *topDrivers[] = {"Hamilton", "Leclerc", "Verstappen", "Russell", "Alonso", "Piastri", "Norris", "Albon", "Tsunoda", "Sainz"};
@@ -51,26 +61,26 @@ int main(int argc, char *argv[])
     if (argc > 3)
     {
         printf("Error: Too many arguments provided.\n");
-        displayUsage();
+        usageInstructions();
         return 1;
     }
     else if (argc >= 2)
     {
         strncpy(track, argv[1], MAX_STRING_LENGTH - 1);
-        track[MAX_STRING_LENGTH - 1] = '\0'; // Ensure null termination
+        track[MAX_STRING_LENGTH - 1] = '\0'; // Null termination
     }
 
     if (argc == 3)
     {
         strncpy(condition, argv[2], MAX_STRING_LENGTH - 1);
-        condition[MAX_STRING_LENGTH - 1] = '\0'; // Ensure null termination
+        condition[MAX_STRING_LENGTH - 1] = '\0';
         toLowercase(condition);
 
         // Validate condition
         if (strcmp(condition, "wet") != 0 && strcmp(condition, "dry") != 0)
         {
             printf("Error: Race condition must be 'wet' or 'dry'.\n");
-            displayUsage();
+            usageInstructions();
             return 1;
         }
     }
@@ -78,6 +88,19 @@ int main(int argc, char *argv[])
     if (argc < 3)
     {
         printf("Note: For more accurate predictions, run with track name and race condition.\n");
-        displayUsage();
+        usageInstructions();
     }
+
+    // Function calls
+    initTeamsAndDrivers(teams, drivers, &driverCount);
+
+    calculatePoints(drivers, driverCount, track, condition);
+
+    calculatePercentages(drivers, driverCount);
+
+    predictPositions(drivers, driverCount);
+
+    printResults(drivers, driverCount, track, condition);
+
+    return 0;
 }
