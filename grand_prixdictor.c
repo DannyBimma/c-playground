@@ -42,7 +42,7 @@ void predictPositions(Driver drivers[], int driverCount);
 void printResults(Driver drivers[], int driverCount, const char *track, const char *condition);
 bool isStringInArray(const char *str, const char *array[], int size);
 void toLowercase(char *str);
-void usageInstructions();
+void usageInstructions(void);
 
 // Top teams and drivers
 const char *topTeams[] = {"McLaren", "Ferrari", "Red Bull", "Mercedes", "Williams"};
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void usageInstructions()
+void usageInstructions(void)
 {
     printf("Usage: ./grand_prixdictor [track] [condition]\n");
     printf("Where [track] is the name of the race track or country\n");
@@ -402,8 +402,6 @@ void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
 
 void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition)
 {
-
-    int totalPoints = 0;
 
     // Init points to 0 for all drivers
     for (int i = 0; i < driverCount; i++)
