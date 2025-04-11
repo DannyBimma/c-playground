@@ -27,15 +27,15 @@ int main(void)
     // Print the grade level
     if (index >= 16)
     {
-        printf("Grade 16+\n");
+        printf("The text has a reading level of grade 16+\n");
     }
     else if (index < 1)
     {
-        printf("Before Grade 1\n");
+        printf("The text has a reading level of grade 1\n");
     }
     else
     {
-        printf("Grade %i\n", index);
+        printf("The text has a reading level of grade %i\n", index);
     }
 }
 
