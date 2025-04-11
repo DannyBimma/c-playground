@@ -4,14 +4,14 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-// Define constants
+// Constants
 #define MAX_DRIVERS 20
 #define MAX_STRING_LENGTH 50
 #define TOP_TEAMS_COUNT 5
 #define TOP_DRIVERS_COUNT 10
 #define ELITE_DRIVERS_COUNT 5
 
-// Define data structures
+// Data structures
 typedef struct
 {
     char name[MAX_STRING_LENGTH];
