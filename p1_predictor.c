@@ -514,3 +514,60 @@ void predictPositions(Driver drivers[], int driverCount)
         }
     }
 }
+
+void printResults(Driver drivers[], int driverCount, const char *track, const char *condition)
+{
+    // Print header
+    printf("\n======= F1 Grand Prix Predictor =======\n\n");
+
+    if (track != NULL && strlen(track) > 0)
+    {
+        printf("Track: %s\n", track);
+    }
+    else
+    {
+        printf("Track: Not specified\n");
+    }
+
+    if (condition != NULL && strlen(condition) > 0)
+    {
+        printf("Condition: %s\n", condition);
+    }
+    else
+    {
+        printf("Condition: Not specified\n");
+    }
+
+    printf("\n");
+
+    // Sort drivers by predicted position
+    Driver sortedDrivers[MAX_DRIVERS];
+    memcpy(sortedDrivers, drivers, driverCount * sizeof(Driver));
+    qsort(sortedDrivers, driverCount, sizeof(Driver), compareDrivers);
+
+    // Driver with highest percentage
+    Driver *highestDriver = &sortedDrivers[0];
+
+    printf("Most likely winner: %s (%.2f%% probability)\n\n",
+           highestDriver->name, highestDriver->percentage);
+
+    // Print remaining grid positions
+    printf("Predicted Grid:\n");
+    printf("--------------------------------------------------------------------------------\n");
+    printf("| Pos | Driver        | Team           | Points | Probability | Number | Country       |\n");
+    printf("--------------------------------------------------------------------------------\n");
+
+    for (int i = 0; i < driverCount; i++)
+    {
+        printf("| P%-2d | %-13s | %-14s | %-6d | %-10.2f%% | #%-5d | %-13s |\n",
+               i + 1,
+               sortedDrivers[i].name,
+               sortedDrivers[i].team->name,
+               sortedDrivers[i].points,
+               sortedDrivers[i].percentage,
+               sortedDrivers[i].number,
+               sortedDrivers[i].country);
+    }
+
+    printf("--------------------------------------------------------------------------------\n");
+}
