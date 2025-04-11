@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     char track[MAX_STRING_LENGTH] = "";
     char condition[MAX_STRING_LENGTH] = "";
 
-    // Parse and validate command line arguments
+    // Parse and validate command line args
     if (argc > 3)
     {
         printf("Error: Too many arguments provided.\n");
