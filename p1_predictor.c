@@ -36,8 +36,8 @@ typedef struct
 
 // Function prototypes
 void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount);
-void calculatePoints(Driver drivers[], int driverCount, const char *track, const char *condition);
-void calculatePercentages(Driver drivers[], int driverCount);
+void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition);
+void calcPercentages(Driver drivers[], int driverCount);
 void predictPositions(Driver drivers[], int driverCount);
 void printResults(Driver drivers[], int driverCount, const char *track, const char *condition);
 bool isStringInArray(const char *str, const char *array[], int size);
@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
     // Function calls
     initTeamsAndDrivers(teams, drivers, &driverCount);
 
-    calculatePoints(drivers, driverCount, track, condition);
+    calcPoints(drivers, driverCount, track, condition);
 
-    calculatePercentages(drivers, driverCount);
+    calcPercentages(drivers, driverCount);
 
     predictPositions(drivers, driverCount);
 
@@ -400,7 +400,7 @@ void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
     (*driverCount)++;
 }
 
-void calculatePoints(Driver drivers[], int driverCount, const char *track, const char *condition)
+void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition)
 {
 
     int totalPoints = 0;
