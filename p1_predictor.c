@@ -104,3 +104,11 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+void usageInstructions()
+{
+    printf("Usage: ./grand_prixdictor [track] [condition]\n");
+    printf("Where [track] is the name of the race track or country\n");
+    printf("And [condition] is either 'wet' or 'dry'\n");
+    printf("Example: ./grand_prixdictor 'Monza' 'wet'\n");
+}
