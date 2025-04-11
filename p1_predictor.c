@@ -478,3 +478,16 @@ void calcPercentages(Driver drivers[], int driverCount)
         drivers[i].percentage = (float)drivers[i].points / totalPoints * 100.0;
     }
 }
+
+// Comparison function for qsort to sort drivers by points
+int compareDrivers(const void *a, const void *b)
+{
+    Driver *driverA = (Driver *)a;
+    Driver *driverB = (Driver *)b;
+
+    if (driverA->points > driverB->points)
+        return -1;
+    if (driverA->points < driverB->points)
+        return 1;
+    return 0;
+}
