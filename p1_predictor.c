@@ -120,3 +120,15 @@ void toLowercase(char *str)
         str[i] = tolower(str[i]);
     }
 }
+
+bool isStringInArray(const char *str, const char *array[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (strcasecmp(str, array[i]) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
