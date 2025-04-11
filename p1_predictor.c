@@ -132,3 +132,270 @@ bool isStringInArray(const char *str, const char *array[], int size)
     }
     return false;
 }
+
+void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
+{
+    // Teams
+    // McLaren
+    strcpy(teams[0].name, "McLaren");
+    strcpy(teams[0].engine, "Mercedes");
+    teams[0].isTopTeam = true;
+
+    // Ferrari
+    strcpy(teams[1].name, "Ferrari");
+    strcpy(teams[1].engine, "Ferrari");
+    teams[1].isTopTeam = true;
+
+    // Red Bull
+    strcpy(teams[2].name, "Red Bull");
+    strcpy(teams[2].engine, "Honda RBPT");
+    teams[2].isTopTeam = true;
+
+    // Mercedes
+    strcpy(teams[3].name, "Mercedes");
+    strcpy(teams[3].engine, "Mercedes");
+    teams[3].isTopTeam = true;
+
+    // Aston Martin
+    strcpy(teams[4].name, "Aston Martin");
+    strcpy(teams[4].engine, "Mercedes");
+    teams[4].isTopTeam = false;
+
+    // Alpine
+    strcpy(teams[5].name, "Alpine");
+    strcpy(teams[5].engine, "Renault");
+    teams[5].isTopTeam = false;
+
+    // Haas
+    strcpy(teams[6].name, "Haas");
+    strcpy(teams[6].engine, "Ferrari");
+    teams[6].isTopTeam = true;
+
+    // Racing Bulls
+    strcpy(teams[7].name, "Racing Bulls");
+    strcpy(teams[7].engine, "Honda RBPT");
+    teams[7].isTopTeam = true;
+
+    // Williams
+    strcpy(teams[8].name, "Williams");
+    strcpy(teams[8].engine, "Mercedes");
+    teams[8].isTopTeam = true;
+
+    // Sauber
+    strcpy(teams[9].name, "Sauber");
+    strcpy(teams[9].engine, "Ferrari");
+    teams[9].isTopTeam = false;
+
+    // Drivers
+    *driverCount = 0;
+
+    // McLaren drivers
+    strcpy(drivers[*driverCount].name, "Norris");
+    drivers[*driverCount].number = 4;
+    strcpy(drivers[*driverCount].country, "United Kingdom");
+    strcpy(drivers[*driverCount].favoriteTrack, "Great Britain");
+    strcpy(drivers[*driverCount].homeTrack, "Great Britain");
+    drivers[*driverCount].team = &teams[0];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Piastri");
+    drivers[*driverCount].number = 81;
+    strcpy(drivers[*driverCount].country, "Australia");
+    strcpy(drivers[*driverCount].favoriteTrack, "Spa");
+    strcpy(drivers[*driverCount].homeTrack, "Australia");
+    drivers[*driverCount].team = &teams[0];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Ferrari drivers
+    strcpy(drivers[*driverCount].name, "Leclerc");
+    drivers[*driverCount].number = 16;
+    strcpy(drivers[*driverCount].country, "Monaco");
+    strcpy(drivers[*driverCount].favoriteTrack, "Monaco");
+    strcpy(drivers[*driverCount].homeTrack, "Monaco");
+    drivers[*driverCount].team = &teams[1];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Hamilton");
+    drivers[*driverCount].number = 44;
+    strcpy(drivers[*driverCount].country, "United Kingdom");
+    strcpy(drivers[*driverCount].favoriteTrack, "Great Britain");
+    strcpy(drivers[*driverCount].homeTrack, "Great Britain");
+    drivers[*driverCount].team = &teams[1];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    // Red Bull drivers
+    strcpy(drivers[*driverCount].name, "Verstappen");
+    drivers[*driverCount].number = 33;
+    strcpy(drivers[*driverCount].country, "Netherlands");
+    strcpy(drivers[*driverCount].favoriteTrack, "Spa");
+    strcpy(drivers[*driverCount].homeTrack, "Netherlands");
+    drivers[*driverCount].team = &teams[2];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Tsunoda");
+    drivers[*driverCount].number = 22;
+    strcpy(drivers[*driverCount].country, "Japan");
+    strcpy(drivers[*driverCount].favoriteTrack, "Suzuka");
+    strcpy(drivers[*driverCount].homeTrack, "Japan");
+    drivers[*driverCount].team = &teams[2];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Mercedes drivers
+    strcpy(drivers[*driverCount].name, "Russell");
+    drivers[*driverCount].number = 63;
+    strcpy(drivers[*driverCount].country, "United Kingdom");
+    strcpy(drivers[*driverCount].favoriteTrack, "Silverstone");
+    strcpy(drivers[*driverCount].homeTrack, "Great Britain");
+    drivers[*driverCount].team = &teams[3];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Antonelli");
+    drivers[*driverCount].number = 12;
+    strcpy(drivers[*driverCount].country, "Italy");
+    strcpy(drivers[*driverCount].favoriteTrack, "Imola");
+    strcpy(drivers[*driverCount].homeTrack, "Italy");
+    drivers[*driverCount].team = &teams[3];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Aston Martin drivers
+    strcpy(drivers[*driverCount].name, "Alonso");
+    drivers[*driverCount].number = 14;
+    strcpy(drivers[*driverCount].country, "Spain");
+    strcpy(drivers[*driverCount].favoriteTrack, "Spain");
+    strcpy(drivers[*driverCount].homeTrack, "Spain");
+    drivers[*driverCount].team = &teams[4];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Stroll");
+    drivers[*driverCount].number = 18;
+    strcpy(drivers[*driverCount].country, "Canada");
+    strcpy(drivers[*driverCount].favoriteTrack, "Canada");
+    strcpy(drivers[*driverCount].homeTrack, "Canada");
+    drivers[*driverCount].team = &teams[4];
+    drivers[*driverCount].isTopDriver = false;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Alpine drivers
+    strcpy(drivers[*driverCount].name, "Gasly");
+    drivers[*driverCount].number = 10;
+    strcpy(drivers[*driverCount].country, "France");
+    strcpy(drivers[*driverCount].favoriteTrack, "Monaco");
+    strcpy(drivers[*driverCount].homeTrack, "France");
+    drivers[*driverCount].team = &teams[5];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Doohan");
+    drivers[*driverCount].number = 7;
+    strcpy(drivers[*driverCount].country, "Australia");
+    strcpy(drivers[*driverCount].favoriteTrack, "Australia");
+    strcpy(drivers[*driverCount].homeTrack, "Australia");
+    drivers[*driverCount].team = &teams[5];
+    drivers[*driverCount].isTopDriver = false;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Haas drivers
+    strcpy(drivers[*driverCount].name, "Bearman");
+    drivers[*driverCount].number = 87;
+    strcpy(drivers[*driverCount].country, "United Kingdom");
+    strcpy(drivers[*driverCount].favoriteTrack, "Jeddah");
+    strcpy(drivers[*driverCount].homeTrack, "Great Britain");
+    drivers[*driverCount].team = &teams[6];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Ocon");
+    drivers[*driverCount].number = 31;
+    strcpy(drivers[*driverCount].country, "France");
+    strcpy(drivers[*driverCount].favoriteTrack, "France");
+    strcpy(drivers[*driverCount].homeTrack, "France");
+    drivers[*driverCount].team = &teams[6];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Racing Bulls drivers
+    strcpy(drivers[*driverCount].name, "Lawson");
+    drivers[*driverCount].number = 30;
+    strcpy(drivers[*driverCount].country, "New Zealand");
+    strcpy(drivers[*driverCount].favoriteTrack, "New Zealand");
+    strcpy(drivers[*driverCount].homeTrack, "New Zealand");
+    drivers[*driverCount].team = &teams[7];
+    drivers[*driverCount].isTopDriver = false;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Hadjar");
+    drivers[*driverCount].number = 6;
+    strcpy(drivers[*driverCount].country, "France");
+    strcpy(drivers[*driverCount].favoriteTrack, "France");
+    strcpy(drivers[*driverCount].homeTrack, "France");
+    drivers[*driverCount].team = &teams[7];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = true;
+    (*driverCount)++;
+
+    // Williams drivers
+    strcpy(drivers[*driverCount].name, "Albon");
+    drivers[*driverCount].number = 23;
+    strcpy(drivers[*driverCount].country, "Thailand");
+    strcpy(drivers[*driverCount].favoriteTrack, "Thailand");
+    strcpy(drivers[*driverCount].homeTrack, "Thailand");
+    drivers[*driverCount].team = &teams[8];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Sainz");
+    drivers[*driverCount].number = 55;
+    strcpy(drivers[*driverCount].country, "Spain");
+    strcpy(drivers[*driverCount].favoriteTrack, "Spain");
+    strcpy(drivers[*driverCount].homeTrack, "Spain");
+    drivers[*driverCount].team = &teams[8];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    // Sauber drivers
+    strcpy(drivers[*driverCount].name, "Hulkenberg");
+    drivers[*driverCount].number = 27;
+    strcpy(drivers[*driverCount].country, "Germany");
+    strcpy(drivers[*driverCount].favoriteTrack, "Germany");
+    strcpy(drivers[*driverCount].homeTrack, "Germany");
+    drivers[*driverCount].team = &teams[9];
+    drivers[*driverCount].isTopDriver = true;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+
+    strcpy(drivers[*driverCount].name, "Bortoleto");
+    drivers[*driverCount].number = 5;
+    strcpy(drivers[*driverCount].country, "Brazil");
+    strcpy(drivers[*driverCount].favoriteTrack, "Brazil");
+    strcpy(drivers[*driverCount].homeTrack, "Brazil");
+    drivers[*driverCount].team = &teams[9];
+    drivers[*driverCount].isTopDriver = false;
+    drivers[*driverCount].isEliteDriver = false;
+    (*driverCount)++;
+}
