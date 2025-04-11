@@ -46,4 +46,38 @@ int main(int argc, char *argv[])
     int driverCount = 0;
     char track[MAX_STRING_LENGTH] = "";
     char condition[MAX_STRING_LENGTH] = "";
+
+    // Parse and validate command line arguments
+    if (argc > 3)
+    {
+        printf("Error: Too many arguments provided.\n");
+        displayUsage();
+        return 1;
+    }
+    else if (argc >= 2)
+    {
+        strncpy(track, argv[1], MAX_STRING_LENGTH - 1);
+        track[MAX_STRING_LENGTH - 1] = '\0'; // Ensure null termination
+    }
+
+    if (argc == 3)
+    {
+        strncpy(condition, argv[2], MAX_STRING_LENGTH - 1);
+        condition[MAX_STRING_LENGTH - 1] = '\0'; // Ensure null termination
+        toLowercase(condition);
+
+        // Validate condition
+        if (strcmp(condition, "wet") != 0 && strcmp(condition, "dry") != 0)
+        {
+            printf("Error: Race condition must be 'wet' or 'dry'.\n");
+            displayUsage();
+            return 1;
+        }
+    }
+
+    if (argc < 3)
+    {
+        printf("Note: For more accurate predictions, run with track name and race condition.\n");
+        displayUsage();
+    }
 }
