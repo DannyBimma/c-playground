@@ -37,6 +37,8 @@ int main(void)
     {
         printf("The text has a reading level of grade %i\n", index);
     }
+
+    printf("The text contains:\n %i letters.\n %i words.\n %i sentences.\n", letters, words, sentences);
 }
 
 int letter_counter(string text)
