@@ -399,3 +399,65 @@ void initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
     drivers[*driverCount].isEliteDriver = false;
     (*driverCount)++;
 }
+
+void calculatePoints(Driver drivers[], int driverCount, const char *track, const char *condition)
+{
+
+    int totalPoints = 0;
+
+    // Init points to 0 for all drivers
+    for (int i = 0; i < driverCount; i++)
+    {
+        drivers[i].points = 0;
+    }
+
+    // Calc points for each driver ability
+    for (int i = 0; i < driverCount; i++)
+    {
+        if (drivers[i].team->isTopTeam)
+        {
+            drivers[i].points += 10;
+        }
+
+        if (drivers[i].isTopDriver)
+        {
+            drivers[i].points += 12;
+        }
+
+        if (drivers[i].isEliteDriver)
+        {
+            drivers[i].points += 15;
+        }
+
+        // Engine points
+        if (strcmp(drivers[i].team->engine, "Mercedes") == 0 ||
+            strcmp(drivers[i].team->engine, "Ferrari") == 0 ||
+            strcmp(drivers[i].team->engine, "Honda RBPT") == 0)
+        {
+            drivers[i].points += 5;
+        }
+
+        // Track points
+        if (track != NULL && strlen(track) > 0)
+        {
+            bool isFavoriteTrack = strcasecmp(track, drivers[i].favoriteTrack) == 0;
+            bool isHomeTrack = strcasecmp(track, drivers[i].homeTrack) == 0 ||
+                               strcasecmp(track, drivers[i].country) == 0;
+
+            if (isFavoriteTrack && isHomeTrack)
+            {
+                drivers[i].points += 12;
+            }
+            else if (isFavoriteTrack || isHomeTrack)
+            {
+                drivers[i].points += 6;
+            }
+        }
+
+        // Wet race points
+        if (condition != NULL && strcmp(condition, "wet") == 0 && drivers[i].isTopDriver)
+        {
+            drivers[i].points += 6;
+        }
+    }
+}
