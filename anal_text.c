@@ -11,10 +11,8 @@ int sentence_counter(string text);
 
 int main(void)
 {
-    // Prompt the user for some text
     string text = get_string("Text: ");
 
-    // Count the number of letters, words, and sentences in the text
     int letters = letter_counter(text);
     int words = word_counter(text);
     int sentences = sentence_counter(text);
@@ -24,18 +22,17 @@ int main(void)
     float S = (float)sentences / words * 100;
     int index = round(0.0588 * L - 0.296 * S - 15.8);
 
-    // Print the grade level
     if (index >= 16)
     {
-        printf("\nThe above text has a reading level of grade 16+\n");
+        printf("\nThe above text has a reading level of grade 16+ 📖\n");
     }
     else if (index < 1)
     {
-        printf("\nThe above text has a reading level of grade 1\n");
+        printf("\nThe above text has a reading level of grade 1 📖\n");
     }
     else
     {
-        printf("\nThe above text has a reading level of grade %i\n", index);
+        printf("\nThe above text has a reading level of grade %i 📖\n", index);
     }
 
     printf("The text contains:\n %i letters.\n %i words.\n %i sentences.\n", letters, words, sentences);
