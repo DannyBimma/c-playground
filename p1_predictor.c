@@ -491,3 +491,26 @@ int compareDrivers(const void *a, const void *b)
         return 1;
     return 0;
 }
+
+void predictPositions(Driver drivers[], int driverCount)
+{
+    // Copy and sort drivers array
+    Driver sortedDrivers[MAX_DRIVERS];
+    memcpy(sortedDrivers, drivers, driverCount * sizeof(Driver));
+
+    // Sort drivers by points (high to low)
+    qsort(sortedDrivers, driverCount, sizeof(Driver), compareDrivers);
+
+    // Assign positions into original driver array
+    for (int i = 0; i < driverCount; i++)
+    {
+        for (int j = 0; j < driverCount; j++)
+        {
+            if (drivers[j].number == sortedDrivers[i].number)
+            {
+                drivers[j].predictedPosition = i + 1;
+                break;
+            }
+        }
+    }
+}
