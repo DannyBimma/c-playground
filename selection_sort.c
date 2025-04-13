@@ -24,4 +24,14 @@ int main()
 {
     int arr[] = {44, 16, 1, 32, 92, 33, 21, 88, 56, 90, 39, 55};
     int n = sizeof(arr) / sizeof(arr[0]);
+
+    printf("Original array: \n");
+    printArray(arr, n);
+
+    selectionSort(arr, n);
+
+    printf("Sorted array: \n");
+    printArray(arr, n);
+
+    return 0;
 }
