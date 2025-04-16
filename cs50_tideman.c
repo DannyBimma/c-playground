@@ -138,18 +138,46 @@ void add_pairs(void)
 // Sort pairs in decreasing order by strength of victory
 void sort_pairs(void)
 {
-    for (int i = 0; i < pair_count; i++)
+    // Bubble sort: compare adjacent pairs and swap if need be
+    for (int i = 0; i < pair_count - 1; i++)
     {
-        for (int j = i + 1; j < pair_count; j++)
+        for (int j = 0; j < pair_count - i - 1; j++)
         {
-            if (preferences[pairs[i].winner][pairs[i].loser] < preferences[pairs[j].winner][pairs[j].loser])
+            int strength1 = preferences[pairs[j].winner][pairs[j].loser];
+            int strength2 = preferences[pairs[j + 1].winner][pairs[j + 1].loser];
+
+            if (strength1 < strength2)
             {
-                pair temp = pairs[i];
-                pairs[i] = pairs[j];
-                pairs[j] = temp;
+                pair temp = pairs[j];
+                pairs[j] = pairs[j + 1];
+                pairs[j + 1] = temp;
             }
         }
     }
+}
+
+// Helper function to check if adding an edge creates a cycle
+bool has_cycle(int start, int end, bool visited[])
+{
+    if (start == end)
+    {
+        return true;
+    }
+
+    visited[start] = true;
+
+    for (int i = 0; i < candidate_count; i++)
+    {
+        if (locked[start][i] && !visited[i])
+        {
+            if (has_cycle(i, end, visited))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 // Lock pairs into the candidate graph in order, without creating cycles
@@ -157,7 +185,9 @@ void lock_pairs(void)
 {
     for (int i = 0; i < pair_count; i++)
     {
-        if (!creates_cycle(pairs[i].winner, pairs[i].loser))
+        bool visited[MAX] = {false};
+        // Before adding the edge, check if it would create a cycle
+        if (!has_cycle(pairs[i].loser, pairs[i].winner, visited))
         {
             locked[pairs[i].winner][pairs[i].loser] = true;
         }
