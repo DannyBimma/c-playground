@@ -168,7 +168,7 @@ void sort_pairs(void)
     }
 }
 
-// Helper function to check if adding an edge creates a cycle
+// Helper function to check if adding edge creates cycle
 bool has_cycle(int start, int end, bool visited[])
 {
     if (start == end)
@@ -208,7 +208,6 @@ void lock_pairs(void)
 // Print the winner of the election
 void print_winner(void)
 {
-    // The winner is the source of the graph (has no incoming edges)
     for (int i = 0; i < candidate_count; i++)
     {
         bool is_source = true;
@@ -223,7 +222,7 @@ void print_winner(void)
             }
         }
 
-        // If no incoming edges found, this is our winner
+        // If no incoming edges found, this should be the FUCKING winner!!!
         if (is_source)
         {
             printf("%s\n", candidates[i]);
