@@ -31,6 +31,7 @@ void add_pairs(void);
 void sort_pairs(void);
 void lock_pairs(void);
 void print_winner(void);
+bool has_cycle(int start, int end, bool visited[]);
 
 int main(int argc, string argv[])
 {
