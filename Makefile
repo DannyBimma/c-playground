@@ -1,7 +1,7 @@
 # Compiler settings
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c11
-LDFLAGS = 
+CFLAGS = -Wall -Wextra -I/opt/homebrew/include
+LDFLAGS = -L/opt/homebrew/lib -ljansson
 
 # Grand_prixdictor app-specific settings
 GP_APP = grand_prixdictor
@@ -39,3 +39,5 @@ $(GP_APP): $(GP_OBJ)
 clean:
 	rm -f $(GP_OBJ) $(GP_APP)
 	@echo "Cleaned up build artifacts"
+
+.PHONY: all clean

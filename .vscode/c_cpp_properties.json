@@ -1,17 +1,18 @@
 {
   "configurations": [
     {
-      "name": "macos-clang-arm64",
+      "name": "Mac",
       "includePath": [
-        "${workspaceFolder}/**"
+        "${workspaceFolder}/**",
+        "/opt/homebrew/include",
+        "/opt/homebrew/Cellar/jansson/2.14.1/include"
+      ],
+      "macFrameworkPath": [
+        "/Library/Developer/CommandLineTools/SDKs/MacOS.sdk/System/Library/Frameworks"
       ],
       "compilerPath": "/usr/bin/clang",
-      "cStandard": "${default}",
-      "cppStandard": "${default}",
-      "intelliSenseMode": "macos-clang-arm64",
-      "compilerArgs": [
-        ""
-      ]
+      "cStandard": "c17",
+      "intelliSenseMode": "macos-clang-arm64"
     }
   ],
   "version": 4

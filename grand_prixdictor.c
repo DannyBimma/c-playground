@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <jansson.h>
 
 // Constants
 #define MAX_DRIVERS 20
@@ -14,6 +15,7 @@
 #define NUM_DRIVERS 20
 #define SUCCESS 0
 #define ERROR_INVALID_TEAM_INDEX -1
+#define CONFIG_FILE "f1_config.json"
 
 // Data structures
 typedef struct
@@ -41,57 +43,21 @@ typedef struct
 // Configuration data structure
 typedef struct
 {
-    const char *teamNames[NUM_TEAMS];
-    const char *engines[NUM_TEAMS];
-    const bool isTopTeam[NUM_TEAMS];
-    const char *driverNames[NUM_DRIVERS];
-    const int driverNumbers[NUM_DRIVERS];
-    const char *driverCountries[NUM_DRIVERS];
-    const char *driverFavTracks[NUM_DRIVERS];
-    const char *driverHomeTracks[NUM_DRIVERS];
-    const int driverTeamIndices[NUM_DRIVERS];
-    const bool isTopDriver[NUM_DRIVERS];
-    const bool isEliteDriver[NUM_DRIVERS];
+    char teamNames[NUM_TEAMS][MAX_STRING_LENGTH];
+    char engines[NUM_TEAMS][MAX_STRING_LENGTH];
+    bool isTopTeam[NUM_TEAMS];
+    char driverNames[NUM_DRIVERS][MAX_STRING_LENGTH];
+    int driverNumbers[NUM_DRIVERS];
+    char driverCountries[NUM_DRIVERS][MAX_STRING_LENGTH];
+    char driverFavTracks[NUM_DRIVERS][MAX_STRING_LENGTH];
+    char driverHomeTracks[NUM_DRIVERS][MAX_STRING_LENGTH];
+    int driverTeamIndices[NUM_DRIVERS];
+    bool isTopDriver[NUM_DRIVERS];
+    bool isEliteDriver[NUM_DRIVERS];
 } F1Configuration;
 
-// Global configuration data
-static const F1Configuration f1Config = {
-    .teamNames = {"McLaren", "Ferrari", "Red Bull", "Mercedes", "Aston Martin",
-                  "Alpine", "Haas", "Racing Bulls", "Williams", "Sauber"},
-    .engines = {"Mercedes", "Ferrari", "Honda RBPT", "Mercedes", "Mercedes",
-                "Renault", "Ferrari", "Honda RBPT", "Mercedes", "Ferrari"},
-    .isTopTeam = {true, true, true, true, false,
-                  false, true, true, true, false},
-    .driverNames = {"Norris", "Piastri", "Leclerc", "Hamilton", "Verstappen",
-                    "Tsunoda", "Russell", "Antonelli", "Alonso", "Stroll",
-                    "Gasly", "Doohan", "Bearman", "Ocon", "Lawson",
-                    "Hadjar", "Albon", "Sainz", "Hulkenberg", "Bortoleto"},
-    .driverNumbers = {4, 81, 16, 44, 33, 22, 63, 12, 14, 18, 10, 7, 87, 31, 30,
-                      6, 23, 55, 27, 5},
-    .driverCountries = {"United Kingdom", "Australia", "Monaco", "United Kingdom", "Netherlands",
-                        "Japan", "United Kingdom", "Italy", "Spain", "Canada",
-                        "France", "Australia", "United Kingdom", "France", "New Zealand",
-                        "France", "Thailand", "Spain", "Germany", "Brazil"},
-    .driverFavTracks = {"Great Britain", "Spa", "Monaco", "Great Britain", "Spa",
-                        "Suzuka", "Silverstone", "Imola", "Spain", "Canada",
-                        "Monaco", "Australia", "Jeddah", "France", "New Zealand",
-                        "France", "Thailand", "Spain", "Germany", "Brazil"},
-    .driverHomeTracks = {"Great Britain", "Australia", "Monaco", "Great Britain", "Netherlands",
-                         "Japan", "Great Britain", "Italy", "Spain", "Canada",
-                         "France", "Australia", "Great Britain", "France", "New Zealand",
-                         "France", "Thailand", "Spain", "Germany", "Brazil"},
-    .driverTeamIndices = {0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9},
-    .isTopDriver = {true, true, true, true, true,
-                    true, true, true, true, false,
-                    true, false, true, true, false,
-                    true, true, true, true, false},
-    .isEliteDriver = {true, false, true, true, true,
-                      false, true, false, true, false,
-                      false, false, false, false, false,
-                      true, false, false, false, false}};
-
 // Function prototypes
-int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount);
+int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount, const F1Configuration *config);
 void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition);
 void calcPercentages(Driver drivers[], int driverCount);
 void predictPositions(Driver drivers[], int driverCount);
@@ -99,6 +65,8 @@ void printResults(Driver drivers[], int driverCount, const char *track, const ch
 bool isStringInArray(const char *str, const char *array[], int size);
 void toLowercase(char *str);
 void usageInstructions(void);
+F1Configuration *loadF1ConfigFromFile(const char *filename);
+void freeF1Config(F1Configuration *config);
 
 // Top teams and drivers
 const char *topTeams[] = {"McLaren", "Ferrari", "Red Bull", "Mercedes", "Williams"};
@@ -107,23 +75,32 @@ const char *eliteDrivers[] = {"Hamilton", "Verstappen", "Norris", "Leclerc", "Ru
 
 int main(int argc, char *argv[])
 {
-    Team teams[10]; // As always
+    Team teams[10];
     Driver drivers[MAX_DRIVERS];
     int driverCount = 0;
     char track[MAX_STRING_LENGTH] = "";
     char condition[MAX_STRING_LENGTH] = "";
+
+    // Load configuration
+    F1Configuration *config = loadF1ConfigFromFile(CONFIG_FILE);
+    if (!config)
+    {
+        fprintf(stderr, "Failed to load configuration. Exiting.\n");
+        return 1;
+    }
 
     // Parse and validate command line args
     if (argc > 3)
     {
         printf("Error: Too many arguments provided.\n");
         usageInstructions();
+        freeF1Config(config);
         return 1;
     }
     else if (argc >= 2)
     {
         strncpy(track, argv[1], MAX_STRING_LENGTH - 1);
-        track[MAX_STRING_LENGTH - 1] = '\0'; // Null termination
+        track[MAX_STRING_LENGTH - 1] = '\0';
     }
 
     if (argc == 3)
@@ -132,11 +109,11 @@ int main(int argc, char *argv[])
         condition[MAX_STRING_LENGTH - 1] = '\0';
         toLowercase(condition);
 
-        // Validate condition
         if (strcmp(condition, "wet") != 0 && strcmp(condition, "dry") != 0)
         {
             printf("Error: Race condition must be 'wet' or 'dry'.\n");
             usageInstructions();
+            freeF1Config(config);
             return 1;
         }
     }
@@ -147,8 +124,13 @@ int main(int argc, char *argv[])
         usageInstructions();
     }
 
-    // Function calls
-    initTeamsAndDrivers(teams, drivers, &driverCount);
+    // Initialize with configuration
+    if (initTeamsAndDrivers(teams, drivers, &driverCount, config) != SUCCESS)
+    {
+        fprintf(stderr, "Failed to initialize teams and drivers\n");
+        freeF1Config(config);
+        return 1;
+    }
 
     calcPoints(drivers, driverCount, track, condition);
 
@@ -158,6 +140,7 @@ int main(int argc, char *argv[])
 
     printResults(drivers, driverCount, track, condition);
 
+    freeF1Config(config);
     return 0;
 }
 
@@ -189,9 +172,9 @@ bool isStringInArray(const char *str, const char *array[], int size)
     return false;
 }
 
-int initTeams(Team teams[])
+int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount, const F1Configuration *config)
 {
-    if (!teams)
+    if (!teams || !drivers || !driverCount || !config)
     {
         return ERROR_INVALID_TEAM_INDEX;
     }
@@ -199,26 +182,11 @@ int initTeams(Team teams[])
     // Init teams
     for (int i = 0; i < NUM_TEAMS; i++)
     {
-        if (strlen(f1Config.teamNames[i]) >= MAX_STRING_LENGTH ||
-            strlen(f1Config.engines[i]) >= MAX_STRING_LENGTH)
-        {
-            return ERROR_INVALID_TEAM_INDEX;
-        }
-        strncpy(teams[i].name, f1Config.teamNames[i], MAX_STRING_LENGTH - 1);
+        strncpy(teams[i].name, config->teamNames[i], MAX_STRING_LENGTH - 1);
         teams[i].name[MAX_STRING_LENGTH - 1] = '\0';
-        strncpy(teams[i].engine, f1Config.engines[i], MAX_STRING_LENGTH - 1);
+        strncpy(teams[i].engine, config->engines[i], MAX_STRING_LENGTH - 1);
         teams[i].engine[MAX_STRING_LENGTH - 1] = '\0';
-        teams[i].isTopTeam = f1Config.isTopTeam[i];
-    }
-
-    return SUCCESS;
-}
-
-int initDrivers(Team teams[], Driver drivers[], int *driverCount)
-{
-    if (!teams || !drivers || !driverCount)
-    {
-        return ERROR_INVALID_TEAM_INDEX;
+        teams[i].isTopTeam = config->isTopTeam[i];
     }
 
     // Init drivers
@@ -226,40 +194,28 @@ int initDrivers(Team teams[], Driver drivers[], int *driverCount)
     for (int i = 0; i < NUM_DRIVERS; i++)
     {
         // Validate team index
-        if (f1Config.driverTeamIndices[i] < 0 || f1Config.driverTeamIndices[i] >= NUM_TEAMS)
+        if (config->driverTeamIndices[i] < 0 || config->driverTeamIndices[i] >= NUM_TEAMS)
         {
             return ERROR_INVALID_TEAM_INDEX;
         }
 
-        // Validate string lengths
-        if (strlen(f1Config.driverNames[i]) >= MAX_STRING_LENGTH ||
-            strlen(f1Config.driverCountries[i]) >= MAX_STRING_LENGTH ||
-            strlen(f1Config.driverFavTracks[i]) >= MAX_STRING_LENGTH ||
-            strlen(f1Config.driverHomeTracks[i]) >= MAX_STRING_LENGTH)
-        {
-            return ERROR_INVALID_TEAM_INDEX;
-        }
-
-        // Copy strings with bounds checking
-        strncpy(drivers[i].name, f1Config.driverNames[i], MAX_STRING_LENGTH - 1);
+        strncpy(drivers[i].name, config->driverNames[i], MAX_STRING_LENGTH - 1);
         drivers[i].name[MAX_STRING_LENGTH - 1] = '\0';
 
-        strncpy(drivers[i].country, f1Config.driverCountries[i], MAX_STRING_LENGTH - 1);
+        strncpy(drivers[i].country, config->driverCountries[i], MAX_STRING_LENGTH - 1);
         drivers[i].country[MAX_STRING_LENGTH - 1] = '\0';
 
-        strncpy(drivers[i].favoriteTrack, f1Config.driverFavTracks[i], MAX_STRING_LENGTH - 1);
+        strncpy(drivers[i].favoriteTrack, config->driverFavTracks[i], MAX_STRING_LENGTH - 1);
         drivers[i].favoriteTrack[MAX_STRING_LENGTH - 1] = '\0';
 
-        strncpy(drivers[i].homeTrack, f1Config.driverHomeTracks[i], MAX_STRING_LENGTH - 1);
+        strncpy(drivers[i].homeTrack, config->driverHomeTracks[i], MAX_STRING_LENGTH - 1);
         drivers[i].homeTrack[MAX_STRING_LENGTH - 1] = '\0';
 
-        // Set other fields
-        drivers[i].number = f1Config.driverNumbers[i];
-        drivers[i].team = &teams[f1Config.driverTeamIndices[i]];
-        drivers[i].isTopDriver = f1Config.isTopDriver[i];
-        drivers[i].isEliteDriver = f1Config.isEliteDriver[i];
+        drivers[i].number = config->driverNumbers[i];
+        drivers[i].team = &teams[config->driverTeamIndices[i]];
+        drivers[i].isTopDriver = config->isTopDriver[i];
+        drivers[i].isEliteDriver = config->isEliteDriver[i];
 
-        // Initialize calculation fields
         drivers[i].points = 0;
         drivers[i].percentage = 0.0f;
         drivers[i].predictedPosition = 0;
@@ -438,4 +394,135 @@ void printResults(Driver drivers[], int driverCount, const char *track, const ch
     }
 
     printf("--------------------------------------------------------------------------------\n");
+}
+
+F1Configuration *loadF1ConfigFromFile(const char *filename)
+{
+    F1Configuration *config = malloc(sizeof(F1Configuration));
+    if (!config)
+    {
+        fprintf(stderr, "Failed to allocate memory for configuration\n");
+        return NULL;
+    }
+
+    json_error_t error;
+    json_t *root = json_load_file(filename, 0, &error);
+    if (!root)
+    {
+        fprintf(stderr, "Error loading JSON file: %s\n", error.text);
+        free(config);
+        return NULL;
+    }
+
+    // Load team data
+    json_t *teams = json_object_get(root, "teams");
+    if (!json_is_array(teams))
+    {
+        fprintf(stderr, "Teams must be an array\n");
+        json_decref(root);
+        free(config);
+        return NULL;
+    }
+
+    size_t team_index;
+    json_t *team;
+    json_array_foreach(teams, team_index, team)
+    {
+        if (team_index >= NUM_TEAMS)
+            break;
+
+        json_t *name = json_object_get(team, "name");
+        json_t *engine = json_object_get(team, "engine");
+        json_t *isTop = json_object_get(team, "isTopTeam");
+
+        if (json_is_string(name))
+        {
+            strncpy(config->teamNames[team_index], json_string_value(name), MAX_STRING_LENGTH - 1);
+            config->teamNames[team_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_string(engine))
+        {
+            strncpy(config->engines[team_index], json_string_value(engine), MAX_STRING_LENGTH - 1);
+            config->engines[team_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_boolean(isTop))
+        {
+            config->isTopTeam[team_index] = json_boolean_value(isTop);
+        }
+    }
+
+    // Load driver data
+    json_t *drivers = json_object_get(root, "drivers");
+    if (!json_is_array(drivers))
+    {
+        fprintf(stderr, "Drivers must be an array\n");
+        json_decref(root);
+        free(config);
+        return NULL;
+    }
+
+    size_t driver_index;
+    json_t *driver;
+    json_array_foreach(drivers, driver_index, driver)
+    {
+        if (driver_index >= NUM_DRIVERS)
+            break;
+
+        json_t *name = json_object_get(driver, "name");
+        json_t *number = json_object_get(driver, "number");
+        json_t *country = json_object_get(driver, "country");
+        json_t *favTrack = json_object_get(driver, "favoriteTrack");
+        json_t *homeTrack = json_object_get(driver, "homeTrack");
+        json_t *teamIndex = json_object_get(driver, "teamIndex");
+        json_t *isTop = json_object_get(driver, "isTopDriver");
+        json_t *isElite = json_object_get(driver, "isEliteDriver");
+
+        if (json_is_string(name))
+        {
+            strncpy(config->driverNames[driver_index], json_string_value(name), MAX_STRING_LENGTH - 1);
+            config->driverNames[driver_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_integer(number))
+        {
+            config->driverNumbers[driver_index] = json_integer_value(number);
+        }
+        if (json_is_string(country))
+        {
+            strncpy(config->driverCountries[driver_index], json_string_value(country), MAX_STRING_LENGTH - 1);
+            config->driverCountries[driver_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_string(favTrack))
+        {
+            strncpy(config->driverFavTracks[driver_index], json_string_value(favTrack), MAX_STRING_LENGTH - 1);
+            config->driverFavTracks[driver_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_string(homeTrack))
+        {
+            strncpy(config->driverHomeTracks[driver_index], json_string_value(homeTrack), MAX_STRING_LENGTH - 1);
+            config->driverHomeTracks[driver_index][MAX_STRING_LENGTH - 1] = '\0';
+        }
+        if (json_is_integer(teamIndex))
+        {
+            config->driverTeamIndices[driver_index] = json_integer_value(teamIndex);
+        }
+        if (json_is_boolean(isTop))
+        {
+            config->isTopDriver[driver_index] = json_boolean_value(isTop);
+        }
+        if (json_is_boolean(isElite))
+        {
+            config->isEliteDriver[driver_index] = json_boolean_value(isElite);
+        }
+    }
+
+    json_decref(root);
+    return config;
+}
+
+void freeF1Config(F1Configuration *config)
+{
+    if (config)
+    {
+        free(config);
+    }
 }
