@@ -3,7 +3,13 @@
 int main(void)
 {
     char *s = "Hello, world!";
-    printf("%s\n", s);
-    printf("%p\n", s);
-    printf("%p\n", &s);
+
+    // Print string
+    printf("The string is: %s\n", s);
+
+    // Print address of string
+    printf("The address of the string is: %p\n", s);
+
+    // Print address of pointer
+    printf("The address of the pointer is: %p\n", &s);
 }
