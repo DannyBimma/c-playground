@@ -189,14 +189,14 @@ bool isStringInArray(const char *str, const char *array[], int size)
     return false;
 }
 
-int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
+int initTeams(Team teams[])
 {
-    if (!teams || !drivers || !driverCount)
+    if (!teams)
     {
         return ERROR_INVALID_TEAM_INDEX;
     }
 
-    // Initialize teams
+    // Init teams
     for (int i = 0; i < NUM_TEAMS; i++)
     {
         if (strlen(f1Config.teamNames[i]) >= MAX_STRING_LENGTH ||
@@ -211,7 +211,17 @@ int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount)
         teams[i].isTopTeam = f1Config.isTopTeam[i];
     }
 
-    // Initialize drivers
+    return SUCCESS;
+}
+
+int initDrivers(Team teams[], Driver drivers[], int *driverCount)
+{
+    if (!teams || !drivers || !driverCount)
+    {
+        return ERROR_INVALID_TEAM_INDEX;
+    }
+
+    // Init drivers
     *driverCount = 0;
     for (int i = 0; i < NUM_DRIVERS; i++)
     {
