@@ -1,5 +1,16 @@
 #include <stdio.h>
 
+typedef struct car
+{
+    char *make;
+    char *model;
+    char *engine;
+    int hp;
+    int torque;
+    int year;
+    int price;
+} car;
+
 int main(void)
 {
     char *s = "Hello, world!";
