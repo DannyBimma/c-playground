@@ -4,6 +4,7 @@ typedef struct car
 {
     char *make;
     char *model;
+    char *chassis;
     char *engine;
     int hp;
     int torque;
