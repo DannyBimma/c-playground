@@ -10,7 +10,7 @@ typedef struct car
     int torque;
     int year;
     int price;
-} car;
+} car_struct;
 
 int main(void)
 {
@@ -24,4 +24,17 @@ int main(void)
 
     // Print address of pointer
     printf("The address of the pointer is: %p\n", &s);
+}
+
+void init_whips(car_struct *car)
+{
+    car_struct my_whip;
+
+    my_whip.make = "Ferrari";
+    my_whip.model = "430 Scuderia";
+    my_whip.chassis = "Carbon Fiber";
+    my_whip.engine = "4.3L V8";
+    my_whip.hp = 503;
+    my_whip.torque = 347;
+    my_whip.year = 2009;
 }
