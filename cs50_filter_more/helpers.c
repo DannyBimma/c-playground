@@ -49,7 +49,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             int blueSum = 0;
             int greenSum = 0;
             int redSum = 0;
-            int count = 0;
+            float count = 0;
 
             // Loop over 3x3 box (offsets) centered on current pixel
             for (int di = -1; di <= 1; di++)
@@ -73,9 +73,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             }
 
             // Calculate average color values for blurred pixel
-            blurred[i][j].rgbtBlue = blueSum / count;
-            blurred[i][j].rgbtGreen = greenSum / count;
-            blurred[i][j].rgbtRed = redSum / count;
+            blurred[i][j].rgbtBlue = round(blueSum / count);
+            blurred[i][j].rgbtGreen = round(greenSum / count);
+            blurred[i][j].rgbtRed = round(redSum / count);
         }
     }
 
