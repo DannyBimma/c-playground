@@ -82,6 +82,14 @@ int main(int argc, char *argv[])
     }
 
     // Parse and validate command line args
+    if (argc == 1)
+    {
+        printf("Error: Incorrect usage! No arguments provided!\n");
+        usageInstructions();
+        freeF1Config(config);
+        return 1;
+    }
+
     if (argc > 3)
     {
         printf("Error: Incorrect usage! Too many arguments provided!\n");
