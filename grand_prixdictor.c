@@ -8,9 +8,6 @@
 // Constants
 #define MAX_DRIVERS 20
 #define MAX_STRING_LENGTH 50
-#define TOP_TEAMS_COUNT 5
-#define TOP_DRIVERS_COUNT 10
-#define ELITE_DRIVERS_COUNT 5
 #define NUM_TEAMS 10
 #define NUM_DRIVERS 20
 #define SUCCESS 0
@@ -68,14 +65,9 @@ void usageInstructions(void);
 F1Configuration *loadF1ConfigFromFile(const char *filename);
 void freeF1Config(F1Configuration *config);
 
-// Top teams and drivers
-const char *topTeams[] = {"McLaren", "Ferrari", "Red Bull", "Mercedes", "Williams"};
-const char *topDrivers[] = {"Hamilton", "Leclerc", "Verstappen", "Russell", "Alonso", "Piastri", "Norris", "Albon", "Tsunoda", "Sainz"};
-const char *eliteDrivers[] = {"Hamilton", "Verstappen", "Norris", "Leclerc", "Russell"};
-
 int main(int argc, char *argv[])
 {
-    Team teams[10];
+    Team teams[NUM_TEAMS];
     Driver drivers[MAX_DRIVERS];
     int driverCount = 0;
     char track[MAX_STRING_LENGTH] = "";
