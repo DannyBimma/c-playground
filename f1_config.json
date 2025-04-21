@@ -56,7 +56,7 @@
       "name": "Norris",
       "number": 4,
       "country": "United Kingdom",
-      "favoriteTrack": "Great Britain",
+      "favoriteTrack": "Silverstone",
       "homeTrack": "Great Britain",
       "teamIndex": 0,
       "isTopDriver": true,
@@ -70,7 +70,7 @@
       "homeTrack": "Australia",
       "teamIndex": 0,
       "isTopDriver": true,
-      "isEliteDriver": false
+      "isEliteDriver": true
     },
     {
       "name": "Leclerc",
@@ -86,7 +86,7 @@
       "name": "Hamilton",
       "number": 44,
       "country": "United Kingdom",
-      "favoriteTrack": "Great Britain",
+      "favoriteTrack": "Spa",
       "homeTrack": "Great Britain",
       "teamIndex": 1,
       "isTopDriver": true,
@@ -136,7 +136,7 @@
       "name": "Alonso",
       "number": 14,
       "country": "Spain",
-      "favoriteTrack": "Spain",
+      "favoriteTrack": "Interlagos",
       "homeTrack": "Spain",
       "teamIndex": 4,
       "isTopDriver": true,
@@ -146,7 +146,7 @@
       "name": "Stroll",
       "number": 18,
       "country": "Canada",
-      "favoriteTrack": "Canada",
+      "favoriteTrack": "Circuit Gilles Villeneuve",
       "homeTrack": "Canada",
       "teamIndex": 4,
       "isTopDriver": false,
@@ -169,7 +169,7 @@
       "favoriteTrack": "Australia",
       "homeTrack": "Australia",
       "teamIndex": 5,
-      "isTopDriver": false,
+      "isTopDriver": true,
       "isEliteDriver": false
     },
     {
