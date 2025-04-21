@@ -217,14 +217,6 @@ int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount, const 
 
 void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition)
 {
-
-    // Init points to 0 for all drivers
-    for (int i = 0; i < driverCount; i++)
-    {
-        drivers[i].points = 0;
-    }
-
-    // Calc points for each driver ability
     for (int i = 0; i < driverCount; i++)
     {
         if (drivers[i].team->isTopTeam)
