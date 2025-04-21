@@ -272,13 +272,11 @@ void calcPercentages(Driver drivers[], int driverCount)
 {
     int totalPoints = 0;
 
-    // Total points
     for (int i = 0; i < driverCount; i++)
     {
         totalPoints += drivers[i].points;
     }
 
-    // Percentage for each driver
     for (int i = 0; i < driverCount; i++)
     {
         drivers[i].percentage = (float)drivers[i].points / totalPoints * 100.0;
