@@ -283,7 +283,7 @@ void calcPercentages(Driver drivers[], int driverCount)
     }
 }
 
-// Comparison function for qsort to sort drivers by points
+// Comparison function for qsort() to sort drivers by points
 int compareDrivers(const void *a, const void *b)
 {
     Driver *driverA = (Driver *)a;
@@ -352,7 +352,7 @@ void printResults(Driver drivers[], int driverCount, const char *track, const ch
     // Driver with highest percentage
     Driver *highestDriver = &sortedDrivers[0];
 
-    printf("Most likely winner: %s (%.2f%% probability)\n\n",
+    printf("The predicted winner is: %s (with a %.2f%% probability)\n\n",
            highestDriver->name, highestDriver->percentage);
 
     // Print remaining grid positions
