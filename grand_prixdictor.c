@@ -217,6 +217,7 @@ int initTeamsAndDrivers(Team teams[], Driver drivers[], int *driverCount, const 
 
 void calcPoints(Driver drivers[], int driverCount, const char *track, const char *condition)
 {
+    // Apply skill points
     for (int i = 0; i < driverCount; i++)
     {
         if (drivers[i].team->isTopTeam)
@@ -234,7 +235,7 @@ void calcPoints(Driver drivers[], int driverCount, const char *track, const char
             drivers[i].points += 15;
         }
 
-        // Engine points
+        // Apply engine points
         if (strcmp(drivers[i].team->engine, "Mercedes") == 0 ||
             strcmp(drivers[i].team->engine, "Ferrari") == 0 ||
             strcmp(drivers[i].team->engine, "Honda RBPT") == 0)
@@ -242,7 +243,7 @@ void calcPoints(Driver drivers[], int driverCount, const char *track, const char
             drivers[i].points += 5;
         }
 
-        // Track points
+        // Apply track points
         if (track != NULL && strlen(track) > 0)
         {
             bool isFavoriteTrack = strcasecmp(track, drivers[i].favoriteTrack) == 0;
@@ -259,7 +260,7 @@ void calcPoints(Driver drivers[], int driverCount, const char *track, const char
             }
         }
 
-        // Wet race points
+        // Apply wet race points
         if (condition != NULL && strcmp(condition, "wet") == 0 && drivers[i].isTopDriver)
         {
             drivers[i].points += 6;
