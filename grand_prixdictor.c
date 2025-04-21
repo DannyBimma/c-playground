@@ -73,18 +73,18 @@ int main(int argc, char *argv[])
     char track[MAX_STRING_LENGTH] = "";
     char condition[MAX_STRING_LENGTH] = "";
 
-    // Load configuration
+    // Load config
     F1Configuration *config = loadF1ConfigFromFile(CONFIG_FILE);
     if (!config)
     {
-        fprintf(stderr, "Failed to load configuration. Exiting.\n");
+        fprintf(stderr, "Config file? Not found! Program? Exiting!\n");
         return 1;
     }
 
     // Parse and validate command line args
     if (argc > 3)
     {
-        printf("Error: Too many arguments provided.\n");
+        printf("Error: Incorrect usage! Too many arguments provided!\n");
         usageInstructions();
         freeF1Config(config);
         return 1;
@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
         if (strcmp(condition, "wet") != 0 && strcmp(condition, "dry") != 0)
         {
-            printf("Error: Race condition must be 'wet' or 'dry'.\n");
+            printf("Error: Incorrect usage! Race condition must be 'wet' or 'dry'.\n");
             usageInstructions();
             freeF1Config(config);
             return 1;
@@ -112,26 +112,23 @@ int main(int argc, char *argv[])
 
     if (argc < 3)
     {
-        printf("Note: For more accurate predictions, run with track name and race condition.\n");
+        printf("Note: For more accurate race predictions, run program with track name and race condition arguments.\n");
         usageInstructions();
     }
 
-    // Initialize with configuration
+    // Init teams and drivers with F1 config
     if (initTeamsAndDrivers(teams, drivers, &driverCount, config) != SUCCESS)
     {
-        fprintf(stderr, "Failed to initialize teams and drivers\n");
+        fprintf(stderr, "Failed to initialise teams and drivers\n");
         freeF1Config(config);
         return 1;
     }
 
+    // Function calls
     calcPoints(drivers, driverCount, track, condition);
-
     calcPercentages(drivers, driverCount);
-
     predictPositions(drivers, driverCount);
-
     printResults(drivers, driverCount, track, condition);
-
     freeF1Config(config);
     return 0;
 }
