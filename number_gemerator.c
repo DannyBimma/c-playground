@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        printf("Usage: ./number_gemerator size of gem\n");
+        printf("Usage: ./number_gemerator (size of gem)\n");
         return 1;
     }
 
@@ -14,16 +14,14 @@ int main(int argc, char *argv[])
     // First half (increasing)
     for (int row = 1; row <= size; row++)
     {
-        // Leading spaces
         for (int space = 1; space <= size - row; space++)
         {
             printf(" ");
         }
 
-        // Numbers in ascending order
         for (int num = 1; num <= row * 2 - 1; num++)
         {
-            printf("%d", num % 10); // Maintain shape with larger numbers
+            printf("%d", num % 10); // To maintain shape with large numbers
         }
 
         printf("\n");
@@ -32,13 +30,11 @@ int main(int argc, char *argv[])
     // Second half (decreasing)
     for (int row = 1; row <= size - 1; row++)
     {
-        // Leading spaces
         for (int space = 1; space <= row; space++)
         {
             printf(" ");
         }
 
-        // Numbers in ascending order
         for (int num = 1; num <= (size - row) * 2 - 1; num++)
         {
             printf("%d", num % 10);
