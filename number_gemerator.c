@@ -24,6 +24,16 @@ int main(int argc, char *argv[])
         printf("Error: That thang is way too big for my 32-bit ass, baby 😮!!\n");
         return 69;
     }
+    else if (size > 66)
+    {
+        // Unsure if it's a limit of the viewport or a limit of the program logic
+        printf("The output may be wonky, this is the upper limit of the gems 💎\n");
+    }
+    else if (size < 1)
+    {
+        printf("Error: Size must be greater than 0\n");
+        return 3;
+    }
 
     // First half (increasing)
     for (int row = 1; row <= size; row++)
