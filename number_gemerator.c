@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 int main(int argc, char *argv[])
 {
@@ -13,10 +14,16 @@ int main(int argc, char *argv[])
     {
         printf("Usage: ./number_gemerator (size of gem)\n");
         printf("Error: Too many arguments\n");
-        return 1;
+        return 2;
     }
 
     int size = atoi(argv[1]);
+
+    if (size > INT_MAX)
+    {
+        printf("Error: That thang is way too big for my 32-bit ass, baby 😮!!\n");
+        return 69;
+    }
 
     // First half (increasing)
     for (int row = 1; row <= size; row++)
