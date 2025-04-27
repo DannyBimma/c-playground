@@ -9,6 +9,13 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (argc > 2)
+    {
+        printf("Usage: ./number_gemerator (size of gem)\n");
+        printf("Error: Too many arguments\n");
+        return 1;
+    }
+
     int size = atoi(argv[1]);
 
     // First half (increasing)
