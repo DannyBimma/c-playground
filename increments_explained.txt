@@ -1,0 +1,70 @@
+An in-depth explanation of wtf is going on in the "increments.c" file
+
+This line of C code: `int c = a++ + ++b;`
+
+Involves a few operations, including variable declaration, assignment, addition, and both post-increment (`a++`) and pre-increment (`++b`) operators. Here's how it's evaluated:
+
+1.  **`int a = 0;`** and **`int b = 0;`**: Before this line, `a` is 0 and `b` is 0.
+
+2.  **`++b` (pre-increment on `b`)**:
+    *   The value of `b` is incremented *before* its value is used in the expression.
+    *   So, `b` becomes `0 + 1 = 1`.
+    *   The value used in the addition for `++b` is `1`.
+
+3.  **`a++` (post-increment on `a`)**:
+    *   The *current* value of `a` is used in the expression *before* it is incremented.
+    *   So, the value used in the addition for `a++` is `0`.
+    *   *After* its value is used, `a` is incremented. So, `a` becomes `0 + 1 = 1`.
+
+4.  **Addition**:
+    *   The values from the previous steps are added: `0` (from `a++`) + `1` (from `++b`).
+    *   The result of the addition is `1`.
+
+5.  **Assignment**:
+    *   The result of the addition (`1`) is assigned to the variable `c`.
+    *   So, `c` becomes `1`.
+
+After this line executes:
+*   `a` will be `1`
+*   `b` will be `1`
+*   `c` will be `1`
+
+The `printf` statement will confirm these values. The behavior of pre-increment and post-increment operators is a common point of confusion.
+
+
+
+A subtle but important C parsing rule called the "maximal munch" principle (or sometimes "greedy parsing").
+
+While it's true that C largely ignores whitespace *between tokens*, it's the process of *forming* those tokens in the first place where the issue with `a+++++b` arises.
+
+Here's how the C compiler would try to interpret `a+++++b`:
+
+1.  It sees `a` and recognizes it as an identifier.
+2.  Then it sees `+`. It looks ahead.
+3.  It sees another `+`. `++` is a valid token (the increment operator). So far, so good: `a++`.
+4.  Now it has `++b` left from `a+++++b`.
+    *   It sees the next `+`. It looks ahead.
+    *   It sees another `+`. `++` is a valid token (the increment operator). So it tokenizes this as `++`.
+    *   This `++` needs an operand.
+5.  Then it sees `+`. It looks ahead.
+6.  It sees `b`. `+` is a valid token (addition operator).
+
+So, the compiler effectively groups `a+++++b` into tokens like this:
+`a++ ++ + b` (or something very close, depending on the exact compiler specifics of how it groups multiple unary operators).
+
+The problem is with `a++ ++`.
+*   `a++` (post-increment): This expression evaluates to the *value* of `a` *before* the increment, and as a side effect, `a` is incremented. The result of `a++` is an r-value (a temporary value, not a variable location).
+*   The second `++` operator: This operator (whether pre or post) needs an l-value as its operand – something that has a memory location and can be modified (like a variable). You can't apply an increment operator directly to the *result* of another increment operator because that result isn't a modifiable variable. You can't do `(a++)++` because `a++` isn't `a` anymore in that context; it's the value `a` had.
+
+It's similar to why you can't write `5++` or `(a+b)++`. The expressions `5` and `(a+b)` produce values, not variable locations that can be incremented.
+
+So, the LSP screams (and the compiler would error out) because `a+++++b` is parsed in a way that leads to an attempt to apply an increment operator to something that isn't a modifiable l-value.
+
+When you write `a++ + ++b` with spaces, the parser clearly sees:
+1.  `a`
+2.  `++` (post-increment for `a`)
+3.  `+` (addition)
+4.  `++` (pre-increment for `b`)
+5.  `b`
+
+Each operator has its correct operand, and the expression is valid. The whitespace is crucial here for separating the `+` (addition) token from the `++` (increment) tokens.
