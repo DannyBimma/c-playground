@@ -163,13 +163,13 @@
       "isEliteDriver": false
     },
     {
-      "name": "Doohan",
-      "number": 7,
-      "country": "Australia",
-      "favoriteTrack": "Australia",
-      "homeTrack": "Australia",
+      "name": "Colapinto",
+      "number": 43,
+      "country": "Argentina",
+      "favoriteTrack": "Abu Dhabi",
+      "homeTrack": "NIL",
       "teamIndex": 5,
-      "isTopDriver": true,
+      "isTopDriver": false,
       "isEliteDriver": false
     },
     {
