@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 
-static void swap(int *a, int *b);
+static void int_swap(int *a, int *b);
 void bubbleSort(int arr[], int n);
 void printArray(int arr[], int size);
 
@@ -35,7 +35,7 @@ int main() {
   return 0;
 }
 
-static void swap(int *a, int *b) {
+static void int_swap(int *a, int *b) {
   int temp = *a;
   *a = *b;
   *b = temp;
@@ -50,7 +50,7 @@ void bubbleSort(int arr[], int n) {
 
     for (j = 0; j < n - i - 1; j++) {
       if (arr[j] > arr[j + 1]) {
-        swap(&arr[j], &arr[j + 1]);
+        int_swap(&arr[j], &arr[j + 1]);
         swapped = 1;
       }
     }
