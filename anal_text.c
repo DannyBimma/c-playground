@@ -18,9 +18,9 @@ int main(void) {
 
   // Rmv newline if present
   size_t len = strlen(text);
-  if (len > 0 && text[len - 1] == '\n') {
+
+  if (len > 0 && text[len - 1] == '\n')
     text[len - 1] = '\0';
-  }
 
   int letters = letter_counter(text);
   int words = word_counter(text);
