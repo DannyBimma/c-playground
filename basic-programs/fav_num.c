@@ -1,3 +1,8 @@
+/*
+ * Author: DannyBimma
+ * Purpose: Find the square of your favourite number.
+ * Copyright (c) 2025 DannyBimma. All Rights Reserved.
+ */
 #include <stdio.h>
 
 int main(void) {
