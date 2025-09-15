@@ -2,11 +2,13 @@
 
 int main(void) {
   int favNum;
+  _Bool successExit = 0; // C89 bools
 
   printf("Please input your favourite number:\n");
   scanf("%d", &favNum);
 
   printf("Your favourite number squared is: %d\n", favNum * favNum);
+  printf("\nProgram ran successfully with exit code: %d\n\n", successExit);
 
-  return 0;
+  return successExit;
 }
