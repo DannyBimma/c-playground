@@ -19,4 +19,9 @@ int main(void) {
     Jnibe,
     Vivi
   };
+
+  enum mugiwaras captain = Luffy;
+  enum mugiwaras navigator = Nami;
+  enum mugiwaras chef = Sanji;
+  enum mugiwaras sniper = Usopp;
 }
