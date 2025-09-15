@@ -5,4 +5,18 @@
 
 #include <stdio.h>
 
-int main(void) {}
+int main(void) {
+  enum mugiwaras {
+    Luffy,
+    Zoro,
+    Nami,
+    Usopp,
+    Sanji,
+    Chopper,
+    Robin,
+    Franky,
+    Brook,
+    Jnibe,
+    Vivi
+  };
+}
