@@ -11,10 +11,10 @@ int main(void) {
 
   printf("---RECTANGLE DIMENSIONS---\n");
   printf("\n");
-  printf("HEIGHT: %lf\n", rect_height);
-  printf("WIDTH: %lf\n", rect_width);
-  printf("PERIMETER: %lf\n", rect_perimeter);
-  printf("AREA: %lf\n", rect_area);
+  printf("HEIGHT: %.2lf\n", rect_height);
+  printf("WIDTH: %.2lf\n", rect_width);
+  printf("PERIMETER: %.2lf\n", rect_perimeter);
+  printf("AREA: %.2lf\n", rect_area);
 
   return 0;
 }
