@@ -1,12 +1,12 @@
 #include <stdio.h>
 
 int main(void) {
-  double rect_width = 420.0;
-  double rect_height = 69.0;
+  double rect_width = 420.69;
+  double rect_height = 69.42;
   double rect_perimeter;
   double rect_area;
 
-  rect_perimeter = 2 * (rect_width + rect_height);
+  rect_perimeter = 2.0 * (rect_width + rect_height);
   rect_area = rect_width * rect_height;
 
   printf("---RECTANGLE DIMENSIONS---\n");
