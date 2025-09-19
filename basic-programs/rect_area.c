@@ -19,14 +19,16 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  if (!parse_double(argv[1], &rect_width)) {
-    fprintf(stderr, "Invalid width: '%s'\n", argv[1]);
-    print_correct_usage(argv[0]);
+  int valid_width = parse_double(argv[1], &rect_width);
+  int valid_height = parse_double(argv[2], &rect_height);
 
-    return 1;
-  }
-  if (!parse_double(argv[2], &rect_height)) {
-    fprintf(stderr, "Invalid height: '%s'\n", argv[2]);
+  if (!valid_width || !valid_height) {
+    if (!valid_width) {
+      fprintf(stderr, "Invalid width: '%s'\n", argv[1]);
+    }
+    if (!valid_height) {
+      fprintf(stderr, "Invalid height: '%s'\n", argv[2]);
+    }
     print_correct_usage(argv[0]);
 
     return 1;
