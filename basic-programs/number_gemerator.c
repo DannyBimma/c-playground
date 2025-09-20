@@ -1,34 +1,70 @@
+#include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
-    printf("Usage: ./number_gemerator (<number>)\n");
+    fprintf(stderr, "Usage: %s <number>\n", argv[0]);
 
     return 1;
   }
 
-  if (argc > 2) {
-    printf("Error: Too many arguments\n");
-    printf("Usage: ./number_gemerator (<number>)\n");
+  // Parse <number> as a positive int with strtol for validation
+  errno = 0;
+  char *end = NULL;
+  const char *arg = argv[1];
+  long parsed = strtol(arg, &end, 10);
+
+  // Detect parsing errors: overflow/underflow, no digits, or trailing chars
+  if (errno == ERANGE || arg == end) {
+    fprintf(stderr, "Error: invalid size '%s'\n", arg);
+
+    return 2;
+  }
+  // Skip trailing spaces before validating end of string
+  while (end && *end == ' ')
+    end++;
+  if (end && *end != '\0') {
+    fprintf(stderr, "Error: unexpected characters after size: '%s'\n", end);
+
+    return 2;
+  }
+  if (parsed < 1 || parsed > INT_MAX) {
+    fprintf(stderr, "Error: size must be in range 1..%d\n", INT_MAX);
 
     return 2;
   }
 
-  int size = atoi(argv[1]);
+  int size = (int)parsed;
 
-  if (size > INT_MAX) {
-    printf("Error: That thang way too big for this 32-bit ass, baby 😮!!\n");
+  /*
+   * UX warning if gem width exceeds terminal columns.
+   * Diamond width is (2*size - 1). Use COLUMNS env if
+   * present, else default 80.
+   */
+  int term_cols = 80;
+  const char *cols_env = getenv("COLUMNS");
 
-    return 69;
-  } else if (size > 66) {
-    // TODO: Unsure if it's a limit of the viewport or just bad code logic
-    printf("Output may be wonky, this is the upper limit of the gems 💎\n");
-  } else if (size < 1) {
-    printf("Error: Size must be greater than 0\n");
+  if (cols_env && *cols_env) {
+    char *cols_end = NULL;
+    long cols_val = strtol(cols_env, &cols_end, 10);
 
-    return 3;
+    if (cols_end && (*cols_end == '\0' || *cols_end == '\n') && cols_val > 0 &&
+        cols_val <= INT_MAX) {
+      term_cols = (int)cols_val;
+    }
+  }
+
+  // long to avoid intermediate overflow
+  long width = (long)size * 2 - 1;
+
+  if (width > term_cols) {
+    fprintf(stderr,
+            "Warning: output width (%ld) exceeds terminal columns (%d); lines "
+            "may wrap.\n",
+            width, term_cols);
   }
 
   // First half (increasing)
@@ -37,7 +73,7 @@ int main(int argc, char *argv[]) {
       printf(" ");
 
     for (int num = 1; num <= row * 2 - 1; num++)
-      printf("%d", num % 10); // Maintain shape with larger numbers
+      printf("%d", num % 10); // maintain shape with larger numbers
 
     printf("\n");
   }
