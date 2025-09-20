@@ -5,6 +5,7 @@ int main(void) {
   int i = c;          // 32-bits
 
   printf("char 'c' cast to int: %d\n", i);
+  // Output: -5
 
   return 0;
 }
