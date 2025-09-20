@@ -1,3 +1,10 @@
+/*
+ * Routine: A program that outputs a diamond made of
+ * integers to the terminal
+ * Author: DannyBimma
+ * Copyright: (c) 2025 Technomancer Pirate Captain. All Rights Reserved.
+ */
+
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
