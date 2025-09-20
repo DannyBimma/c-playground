@@ -1,71 +1,57 @@
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
-int main(int argc, char *argv[])
-{
-    if (argc != 2)
-    {
-        printf("Usage: ./number_gemerator (size of gem)\n");
-        return 1;
-    }
+int main(int argc, char *argv[]) {
+  if (argc != 2) {
+    printf("Usage: ./number_gemerator (<number>)\n");
 
-    if (argc > 2)
-    {
-        printf("Usage: ./number_gemerator (size of gem)\n");
-        printf("Error: Too many arguments\n");
-        return 2;
-    }
+    return 1;
+  }
 
-    int size = atoi(argv[1]);
+  if (argc > 2) {
+    printf("Error: Too many arguments\n");
+    printf("Usage: ./number_gemerator (<number>)\n");
 
-    if (size > INT_MAX)
-    {
-        printf("Error: That thang is way too big for my 32-bit ass, baby 😮!!\n");
-        return 69;
-    }
-    else if (size > 66)
-    {
-        // Unsure if it's a limit of the viewport or a limit of the program logic
-        printf("The output may be wonky, this is the upper limit of the gems 💎\n");
-    }
-    else if (size < 1)
-    {
-        printf("Error: Size must be greater than 0\n");
-        return 3;
-    }
+    return 2;
+  }
 
-    // First half (increasing)
-    for (int row = 1; row <= size; row++)
-    {
-        for (int space = 1; space <= size - row; space++)
-        {
-            printf(" ");
-        }
+  int size = atoi(argv[1]);
 
-        for (int num = 1; num <= row * 2 - 1; num++)
-        {
-            printf("%d", num % 10); // To maintain shape with large numbers
-        }
+  if (size > INT_MAX) {
+    printf("Error: That thang way too big for this 32-bit ass, baby 😮!!\n");
 
-        printf("\n");
-    }
+    return 69;
+  } else if (size > 66) {
+    // TODO: Unsure if it's a limit of the viewport or just bad code logic
+    printf("Output may be wonky, this is the upper limit of the gems 💎\n");
+  } else if (size < 1) {
+    printf("Error: Size must be greater than 0\n");
 
-    // Second half (decreasing)
-    for (int row = 1; row <= size - 1; row++)
-    {
-        for (int space = 1; space <= row; space++)
-        {
-            printf(" ");
-        }
+    return 3;
+  }
 
-        for (int num = 1; num <= (size - row) * 2 - 1; num++)
-        {
-            printf("%d", num % 10);
-        }
+  // First half (increasing)
+  for (int row = 1; row <= size; row++) {
+    for (int space = 1; space <= size - row; space++)
+      printf(" ");
 
-        printf("\n");
-    }
+    for (int num = 1; num <= row * 2 - 1; num++)
+      printf("%d", num % 10); // Maintain shape with larger numbers
 
-    return 0;
+    printf("\n");
+  }
+
+  // Second half (decreasing)
+  for (int row = 1; row <= size - 1; row++) {
+    for (int space = 1; space <= row; space++)
+      printf(" ");
+
+    for (int num = 1; num <= (size - row) * 2 - 1; num++)
+      printf("%d", num % 10);
+
+    printf("\n");
+  }
+
+  return 0;
 }
