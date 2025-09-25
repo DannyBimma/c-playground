@@ -1,93 +1,84 @@
 #include <cs50.h>
-#include <stdio.h>
-#include <string.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 bool validate_key(string key);
 string encrypt_text(string plaintext, string key);
 
-int main(int argc, string argv[])
-{
-    // Command-line argument check
-    if (argc != 2)
-    {
-        printf("Usage: ./substitution key\n");
-        return 1;
-    }
+int main(int argc, string argv[]) {
+  // Command-line argument check
+  if (argc != 2) {
+    printf("Usage: ./substitution key\n");
 
-    // Get and validate key
-    string key = argv[1];
+    return 1;
+  }
 
-    if (!validate_key(key))
-    {
-        printf("Invalid: Please run program by providing a 26 alphabetical character key.\n");
-        return 1;
-    }
+  // Get and validate key
+  string key = argv[1];
 
-    // Get plaintext, encrypt, and print ciphertext
-    string plaintext = get_string("plaintext:  ");
+  if (!validate_key(key)) {
+    printf("Invalid: Please run program by providing a 26 alphabetical "
+           "character key.\n");
 
-    string ciphertext = encrypt_text(plaintext, key);
+    return 1;
+  }
 
-    printf("ciphertext: %s\n", ciphertext);
+  // Get plaintext, encrypt, and print ciphertext
+  string plaintext = get_string("plaintext:  ");
 
-    return 0;
+  string ciphertext = encrypt_text(plaintext, key);
+
+  printf("ciphertext: %s\n", ciphertext);
+
+  return 0;
 }
 
-bool validate_key(string key)
-{
-    int n = strlen(key);
+bool validate_key(string key) {
+  int n = strlen(key);
 
-    // Check how long that thang is 😉
-    if (n != 26)
-    {
-        return false;
+  // Check how long that thang is 😉
+  if (n != 26) {
+    return false;
+  }
+
+  // Check if all characters are alphabetic and unique
+  int freq[26] = {0}; // Frequency array for letters A-Z
+  for (int i = 0; i < n; i++) {
+    if (!isalpha(key[i])) {
+      return false; // Not an alphabetic char
+    }
+    int index = toupper(key[i]) - 'A';
+    if (freq[index] > 0) {
+      return false; // Duplicate char found
     }
 
-    // Check if all characters are alphabetic and unique
-    int freq[26] = {0}; // Frequency array for letters A-Z
-    for (int i = 0; i < n; i++)
-    {
-        if (!isalpha(key[i]))
-        {
-            return false; // Not an alphabetic char
-        }
-        int index = toupper(key[i]) - 'A';
-        if (freq[index] > 0)
-        {
-            return false; // Duplicate char found
-        }
+    freq[index]++;
+  }
 
-        freq[index]++;
-    }
-
-    return true;
+  return true;
 }
 
-string encrypt_text(string plaintext, string key)
-{
-    int n = strlen(plaintext);
-    string ciphertext = plaintext;
+string encrypt_text(string plaintext, string key) {
+  int n = strlen(plaintext);
+  string ciphertext = plaintext;
 
-    for (int i = 0; i < n; i++)
-    {
-        if (isalpha(plaintext[i]))
-        {
-            // Preserve case
-            bool is_upper = isupper(plaintext[i]);
-            int index = toupper(plaintext[i]) - 'A'; // 0-based index
+  for (int i = 0; i < n; i++) {
+    if (isalpha(plaintext[i])) {
+      // Preserve case
+      bool is_upper = isupper(plaintext[i]);
+      int index = toupper(plaintext[i]) - 'A'; // 0-based index
 
-            // Substitute chars using key and maintain case
-            char substituted_char = key[index];
-            ciphertext[i] = is_upper ? toupper(substituted_char) : tolower(substituted_char);
-        }
-        else
-        {
-            // Keep non-alphabetic characters unchanged
-            ciphertext[i] = plaintext[i];
-        }
+      // Substitute chars using key and maintain case
+      char substituted_char = key[index];
+      ciphertext[i] =
+          is_upper ? toupper(substituted_char) : tolower(substituted_char);
+    } else {
+      // Keep non-alphabetic characters unchanged
+      ciphertext[i] = plaintext[i];
     }
+  }
 
-    return ciphertext;
+  return ciphertext;
 }
