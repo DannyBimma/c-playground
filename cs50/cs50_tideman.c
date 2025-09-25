@@ -1,3 +1,11 @@
+/*
+ * CS50 Tideman
+ *
+ * Implements the Tideman (ranked pairs) election. Reads candidate names from
+ * the command line and then voter rankings from stdin, computes preferences,
+ * locks pairs without cycles, and prints the source of the resulting DAG.
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
@@ -149,7 +157,7 @@ void sort_pairs(void) {
   }
 }
 
-// Helper function to check if adding edge creates cycle
+// Helper function: check if adding edge creates a cycle
 bool has_cycle(int start, int end, bool visited[]) {
   if (start == end) {
     return true;
@@ -191,7 +199,7 @@ void print_winner(void) {
       }
     }
 
-    // If no incoming edges found, this should be the FUCKING winner!!!
+    // If no incoming edges found, this is the winner
     if (is_source) {
       printf("%s\n", candidates[i]);
 

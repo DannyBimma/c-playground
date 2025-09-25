@@ -1,3 +1,12 @@
+/*
+ * CS50 Runoff
+ *
+ * Implements an instant-runoff (ranked-choice) election. Reads candidate
+ * names from the command line and voter rankings from stdin, repeatedly
+ * tabulates votes, eliminates the last-place candidate(s), and prints the
+ * winner when one has a majority or all remaining candidates are tied.
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>

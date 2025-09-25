@@ -1,3 +1,10 @@
+/*
+ * CS50 Readability
+ *
+ * Computes the Coleman–Liau index for a given text and prints an approximate
+ * U.S. grade level (e.g., "Grade 8", "Before Grade 1", or "Grade 16+").
+ */
+
 #include <cs50.h>
 #include <ctype.h>
 #include <math.h>
@@ -35,36 +42,33 @@ int main(void) {
 
 int letter_counter(string text) {
   int letters = 0;
-
-  for (int i = 0; i < strlen(text); i++) {
+  int n = strlen(text);
+  for (int i = 0; i < n; i++) {
     if (isalpha(text[i])) {
       letters++;
     }
   }
-
   return letters;
 }
 
 int word_counter(string text) {
   int words = 0;
-
-  for (int i = 0; i < strlen(text); i++) {
+  int n = strlen(text);
+  for (int i = 0; i < n; i++) {
     if (isspace(text[i])) {
       words++;
     }
   }
-
   return words + 1;
 }
 
 int sentence_counter(string text) {
   int sentences = 0;
-
-  for (int i = 0; i < strlen(text); i++) {
+  int n = strlen(text);
+  for (int i = 0; i < n; i++) {
     if (text[i] == '.' || text[i] == '!' || text[i] == '?') {
       sentences++;
     }
   }
-
   return sentences;
 }

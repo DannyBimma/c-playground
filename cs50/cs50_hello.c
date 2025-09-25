@@ -1,7 +1,14 @@
+/*
+ * CS50 Hello
+ *
+ * Simple greeting program: prompts for a name and prints "hello, <name>".
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 
 int main(void) {
-  // You know what, CS50 faculty? Deal with it 🙄!!
-  printf("hello, %s\n", get_string("What's your name? "));
+  string name = get_string("What's your name? ");
+  printf("hello, %s\n", name);
+  return 0;
 }

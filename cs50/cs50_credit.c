@@ -1,3 +1,10 @@
+/*
+ * CS50 Credit
+ *
+ * Validates a credit card number using Luhn's algorithm and prints the
+ * issuer (AMEX, MASTERCARD, VISA) or INVALID.
+ */
+
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,7 +34,7 @@ bool luhns_algo(long card_num) {
   int sum = 0;
   bool flag = false;
 
-  // Cast long to string
+  // Cast long to string for digit-wise processing
   char num_str[20];
   sprintf(num_str, "%ld", card_num);
   int num_len = strlen(num_str);

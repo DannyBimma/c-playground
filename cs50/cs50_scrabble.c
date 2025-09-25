@@ -1,3 +1,10 @@
+/*
+ * CS50 Scrabble
+ *
+ * Computes Scrabble-like scores for two input words and prints the winner or
+ * a tie. Letter scores are based on the classic English Scrabble distribution.
+ */
+
 #include <cs50.h>
 #include <ctype.h>
 #include <stdio.h>

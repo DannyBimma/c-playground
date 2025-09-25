@@ -1,3 +1,11 @@
+/*
+ * CS50 Substitution
+ *
+ * Implements a monoalphabetic substitution cipher. Expects a 26-letter key
+ * (case-insensitive, letters must be unique) as a command-line argument and
+ * outputs the ciphertext for user-provided plaintext. Usage: ./substitution key
+ */
+
 #include <cs50.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -19,8 +27,7 @@ int main(int argc, string argv[]) {
   string key = argv[1];
 
   if (!validate_key(key)) {
-    printf("Invalid: Please run program by providing a 26 alphabetical "
-           "character key.\n");
+    printf("Invalid key: provide 26 unique alphabetic characters.\n");
 
     return 1;
   }
@@ -38,7 +45,7 @@ int main(int argc, string argv[]) {
 bool validate_key(string key) {
   int n = strlen(key);
 
-  // Check how long that thang is 😉
+  // Key must be exactly 26 characters
   if (n != 26) {
     return false;
   }

@@ -1,4 +1,9 @@
-// Simulate genetic inheritance of blood type
+/*
+ * CS50 Inheritance
+ *
+ * Simulates genetic inheritance of blood type alleles across generations.
+ * Creates a family tree, prints alleles per generation, and frees memory.
+ */
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -35,8 +40,8 @@ int main(void) {
 
 // Create a new individual with `generations`
 person *create_family(int generations) {
-  // Allocate memory for new person
-  person *new_person = malloc(sizeof(person) * GENERATIONS);
+  // Allocate memory for a single person
+  person *new_person = malloc(sizeof(person));
 
   // If there are still generations left to create
   if (generations > 1) {

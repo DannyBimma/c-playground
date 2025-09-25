@@ -1,3 +1,11 @@
+/*
+ * CS50 Caesar
+ *
+ * Implements a Caesar cipher. Expects a non-negative integer key as a
+ * command-line argument and outputs the rotated ciphertext for a user-provided
+ * plaintext. Usage: ./caesar key
+ */
+
 #include <cs50.h>
 #include <ctype.h>
 #include <stdio.h>

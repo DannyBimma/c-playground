@@ -1,30 +1,32 @@
+/*
+ * CS50 Mario (less)
+ *
+ * Prints a right-aligned half-pyramid of height 1..8 using hashes (#).
+ */
+
 #include <cs50.h>
-#include <limits.h> // IDK, seems like a good idea for mem safety
 #include <stdio.h>
 
 int main(void) {
   int height;
 
-  // Prompt user for a number between 1 and... the end of a 32-bit integer
-  // 🤷🏽‍♂️?
+  // Prompt for height in the inclusive range [1, 8]
   do {
-    height = get_int("HEIGHT: ");
-  } while (height < 1 || height > INT_MAX);
+    height = get_int("Height: ");
+  } while (height < 1 || height > 8);
 
-  // Print pyramid rows based height
+  // Print pyramid rows
   for (int i = 0; i < height; i++) {
-
-    // Print spaces for each row (1-less than height)
+    // Leading spaces
     for (int k = i; k < (height - 1); k++) {
       printf(" ");
     }
-
-    // Print pyramid colums based on row interation
+    // Hashes
     for (int j = 0; j <= i; j++) {
       printf("#");
     }
-
-    // Escape to new line
     printf("\n");
   }
+
+  return 0;
 }

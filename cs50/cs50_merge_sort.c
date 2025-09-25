@@ -8,11 +8,11 @@
  * 3. Merging the sorted halves to produce the final sorted array
  *
  * Time Complexity:
- * - Best Case: O(n log n)
- * - Average Case: O(n log n)
- * - Worst Case: O(n log n)
+ * - Best:    O(n log n)
+ * - Average: O(n log n)
+ * - Worst:   O(n log n)
  *
- * Space Complexity: O(n) - requires additional space for merging
+ * Space Complexity: O(n) — additional space for merging
  */
 
 #include <stdio.h>

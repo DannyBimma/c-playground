@@ -1,22 +1,20 @@
-#include <stdbool.h>
+/*
+ * CS50 Mario (more)
+ *
+ * Prints a double half-pyramid of height 1..8 with a two-space gap between
+ * the pyramids, using hashes (#).
+ */
+
+#include <cs50.h>
 #include <stdio.h>
 
 int main(void) {
   int height;
-  bool valid_input = false;
 
-  // Input validation
+  // Prompt for height in the inclusive range [1, 8]
   do {
-    printf("Height: ");
-    if (scanf("%d", &height) == 1) {
-      if (height >= 1 && height <= 8) {
-        valid_input = true;
-      }
-    }
-    // Clear input buffer
-    while (getchar() != '\n')
-      ;
-  } while (!valid_input);
+    height = get_int("Height: ");
+  } while (height < 1 || height > 8);
 
   // Pyramid scheme
   for (int i = 1; i <= height; i++) {
