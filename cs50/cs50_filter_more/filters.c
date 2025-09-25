@@ -1,3 +1,18 @@
+/*
+ * CS50 Filters (more)
+ *
+ * A command-line BMP image filter that applies one of four effects to a
+ * 24-bit uncompressed BMP 4.0 image and writes the result to a new file.
+ *
+ * Supported filters (flags):
+ *   -b  box blur
+ *   -e  edges (Sobel operator)
+ *   -g  grayscale
+ *   -r  horizontal reflection (mirror)
+ *
+ * Usage: ./filter -[begr] infile.bmp outfile.bmp
+ */
+
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,13 +20,13 @@
 #include "helpers.h"
 
 int main(int argc, char *argv[]) {
-  // Define allowable filters
-  char *filters = "begr";
+  // Valid single-letter filter options (used with a leading '-')
+  const char *filters = "begr";
 
   // Get filter flag and check validity
   char filter = getopt(argc, argv, filters);
-  if (filter == '?') {
-    printf("Invalid filter.\n");
+  if (filter == '?' || filter == -1) {
+    printf("Invalid or missing filter.\n");
 
     return 1;
   }
@@ -25,7 +40,7 @@ int main(int argc, char *argv[]) {
 
   // Ensure proper usage
   if (argc != optind + 2) {
-    printf("Usage: ./filter [flag] infile outfile\n");
+    printf("Usage: ./filter -[begr] infile.bmp outfile.bmp\n");
 
     return 3;
   }
@@ -34,16 +49,16 @@ int main(int argc, char *argv[]) {
   char *infile = argv[optind];
   char *outfile = argv[optind + 1];
 
-  // Open input file
-  FILE *inptr = fopen(infile, "r");
+  // Open input BMP (binary mode)
+  FILE *inptr = fopen(infile, "rb");
   if (inptr == NULL) {
     printf("Could not open %s.\n", infile);
 
     return 4;
   }
 
-  // Open output file
-  FILE *outptr = fopen(outfile, "w");
+  // Open output BMP (binary mode)
+  FILE *outptr = fopen(outfile, "wb");
   if (outptr == NULL) {
     fclose(inptr);
     printf("Could not create %s.\n", outfile);
@@ -73,9 +88,8 @@ int main(int argc, char *argv[]) {
   int height = abs(bi.biHeight);
   int width = bi.biWidth;
 
-  // Allocate memory for image
-  RGBTRIPLE(*image)
-  [width] = calloc(height, width * sizeof(RGBTRIPLE));
+  // Allocate memory for image (height x width 2D array)
+  RGBTRIPLE(*image)[width] = calloc(height, width * sizeof(RGBTRIPLE));
   if (image == NULL) {
     printf("Not enough memory to store image.\n");
     fclose(outptr);

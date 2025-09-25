@@ -1,3 +1,11 @@
+/*
+ * Image processing helpers for CS50 Filters (more):
+ * - grayscale: convert each pixel to its luminance average
+ * - reflect: mirror image horizontally in-place
+ * - blur: box blur using a 3x3 kernel with edge-aware averaging
+ * - edges: Sobel edge detection with per-channel clamping
+ */
+
 #include "helpers.h"
 #include <math.h>
 
@@ -31,41 +39,38 @@ void reflect(int height, int width, RGBTRIPLE image[height][width]) {
   return;
 }
 
-// Blur image
+// Blur image (3x3 box blur with edge handling)
 void blur(int height, int width, RGBTRIPLE image[height][width]) {
-  // 2D Array for original pixel values
+  // Destination buffer for blurred values; read from source image only
   RGBTRIPLE blurred[height][width];
 
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      // Init sums of color values and count
-      int blueSum = 0;
-      int greenSum = 0;
-      int redSum = 0;
-      float count = 0;
+      // Accumulate neighbour colour sums and count valid samples
+      int sumB = 0, sumG = 0, sumR = 0;
+      int count = 0;
 
-      // Loop over 3x3 box (offsets) centered on current pixel
+      // Loop over 3x3 box (offsets) centred on current pixel
       for (int di = -1; di <= 1; di++) {
         for (int dj = -1; dj <= 1; dj++) {
-          // Neighbor pixel
+          // Neighbour pixel
           int ni = i + di;
           int nj = j + dj;
 
-          // Check if neighbor pixel is within bounds
+          // Check if neighbour pixel is within bounds
           if (ni >= 0 && ni < height && nj >= 0 && nj < width) {
-            // Add color values of neighbor pixel to sums
-            blueSum += image[ni][nj].rgbtBlue;
-            greenSum += image[ni][nj].rgbtGreen;
-            redSum += image[ni][nj].rgbtRed;
+            sumB += image[ni][nj].rgbtBlue;
+            sumG += image[ni][nj].rgbtGreen;
+            sumR += image[ni][nj].rgbtRed;
             count++;
           }
         }
       }
 
-      // Calculate average color values for blurred pixel
-      blurred[i][j].rgbtBlue = round(blueSum / count);
-      blurred[i][j].rgbtGreen = round(greenSum / count);
-      blurred[i][j].rgbtRed = round(redSum / count);
+      // Calculate average colour values for blurred pixel
+      blurred[i][j].rgbtBlue = (BYTE)round((double)sumB / count);
+      blurred[i][j].rgbtGreen = (BYTE)round((double)sumG / count);
+      blurred[i][j].rgbtRed = (BYTE)round((double)sumR / count);
     }
   }
 
@@ -79,33 +84,31 @@ void blur(int height, int width, RGBTRIPLE image[height][width]) {
   return;
 }
 
-// Detect edges
+// Detect edges (Sobel operator)
 void edges(int height, int width, RGBTRIPLE image[height][width]) {
-  // 2D Array for original pixel values
+  // Temporary buffer for edge-detected values
   RGBTRIPLE temp[height][width];
 
-  // Init Gx and Gy kernels
+  // Sobel Gx and Gy kernels
   int Gx[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}};
-
   int Gy[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
   // Loop over each pixel in image
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      // Init sums for Gx and Gy for each color channel
-      float gxBlue = 0, gyBlue = 0;
-      float gxGreen = 0, gyGreen = 0;
-      float gxRed = 0, gyRed = 0;
+      // Accumulate Gx and Gy for each channel using integer math
+      int gxBlue = 0, gyBlue = 0;
+      int gxGreen = 0, gyGreen = 0;
+      int gxRed = 0, gyRed = 0;
 
-      // Loop over 3x3 box centered on current pixel
+      // Loop over 3x3 box centred on current pixel
       for (int di = -1; di <= 1; di++) {
         for (int dj = -1; dj <= 1; dj++) {
           // Neighbor pixel
           int ni = i + di;
           int nj = j + dj;
 
-          // Check if neighbor pixel is within bounds
-          // Treat pixels outside bounds as black (0) for calculation
+          // Check bounds; treat out-of-bounds as black (implicit zeros)
           if (ni >= 0 && ni < height && nj >= 0 && nj < width) {
             // Add weighted color values to Gx and Gy sums
             gxBlue += image[ni][nj].rgbtBlue * Gx[di + 1][dj + 1];
@@ -118,19 +121,21 @@ void edges(int height, int width, RGBTRIPLE image[height][width]) {
         }
       }
 
-      // Calculate final edge value for each color channel
-      int finalBlue = round(sqrt(gxBlue * gxBlue + gyBlue * gyBlue));
-      int finalGreen = round(sqrt(gxGreen * gxGreen + gyGreen * gyGreen));
-      int finalRed = round(sqrt(gxRed * gxRed + gyRed * gyRed));
+      // Calculate final edge value for each colour channel
+      int finalBlue =
+          (int)round(sqrt((double)(gxBlue * gxBlue + gyBlue * gyBlue)));
+      int finalGreen =
+          (int)round(sqrt((double)(gxGreen * gxGreen + gyGreen * gyGreen)));
+      int finalRed = (int)round(sqrt((double)(gxRed * gxRed + gyRed * gyRed)));
 
-      // Cap values at 255
+      // Clamp to 0..255 and store
       temp[i][j].rgbtBlue = (finalBlue > 255) ? 255 : finalBlue;
       temp[i][j].rgbtGreen = (finalGreen > 255) ? 255 : finalGreen;
       temp[i][j].rgbtRed = (finalRed > 255) ? 255 : finalRed;
     }
   }
 
-  // Copy edges values back to original image
+  // Copy edge-detected values back to original image
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       image[i][j] = temp[i][j];
