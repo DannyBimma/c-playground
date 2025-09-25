@@ -1,11 +1,19 @@
+/*
+ * Image processing helpers for CS50 Filter (less):
+ * - grayscale: convert each pixel to its luminance average
+ * - sepia: apply sepia tone with channel capping
+ * - reflect: mirror image horizontally in-place
+ * - blur: box blur using a 3x3 kernel with edge-aware averaging
+ */
+
 #include "helpers.h"
 #include <math.h>
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width]) {
-  // Iterate over every row of pixels in the img
+  // Iterate over every pixel and set each channel to the average
   for (int i = 0; i < height; i++) {
-    // For each pixel in each row, get average RGB value
+    // For each pixel in the row, compute average RGB value
     for (int j = 0; j < width; j++) {
       int avg = round(
           (image[i][j].rgbtRed + image[i][j].rgbtGreen + image[i][j].rgbtBlue) /
@@ -23,9 +31,9 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width]) {
 
 // Convert image to sepia
 void sepia(int height, int width, RGBTRIPLE image[height][width]) {
-  // Iterate over each row of pixels in the img
+  // Iterate over each pixel and compute sepia-transformed channels
   for (int i = 0; i < height; i++) {
-    // For each pixel in each row, calc sepia values based on orginal RGB values
+    // For each pixel, calculate sepia values based on original RGB values
     for (int j = 0; j < width; j++) {
       int sepiaRed = round((0.393 * image[i][j].rgbtRed) +
                            (0.769 * image[i][j].rgbtGreen) +
@@ -37,7 +45,7 @@ void sepia(int height, int width, RGBTRIPLE image[height][width]) {
                             (0.534 * image[i][j].rgbtGreen) +
                             (0.131 * image[i][j].rgbtBlue));
 
-      // Cap new sepia RGB values at 255 if exceeded and apply to pixels
+      // Cap sepia channel values at 255 and apply
       if (sepiaRed > 255) {
         image[i][j].rgbtRed = 255;
       } else {
@@ -63,9 +71,9 @@ void sepia(int height, int width, RGBTRIPLE image[height][width]) {
 
 // Reflect image horizontally
 void reflect(int height, int width, RGBTRIPLE image[height][width]) {
-  // Iterate over each row of pixels in the img
+  // Swap pixels symmetrically across the vertical midline
   for (int i = 0; i < height; i++) {
-    // For each pixel in each row, rearrange the pixels in reverse order
+    // For each pixel in the row, up to the midpoint
     for (int j = 0; j < width / 2; j++) {
       RGBTRIPLE temp = image[i][j];
 
@@ -77,227 +85,40 @@ void reflect(int height, int width, RGBTRIPLE image[height][width]) {
   return;
 }
 
-// Blur image
+// Blur image (3x3 box blur with edge handling)
 void blur(int height, int width, RGBTRIPLE image[height][width]) {
-  // Innit 2D array to make copy of img
-  RGBTRIPLE image_copy[height][width];
-
-  // Copy orginal img pixel by pixel
+  // Make a copy to ensure reads are from the original state
+  RGBTRIPLE src[height][width];
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      image_copy[i][j] = image[i][j];
+      src[i][j] = image[i][j];
     }
   }
 
-  // Iterate over each row of pixels in the img
+  // For each pixel, average all valid neighbors in the 3x3 window
   for (int i = 0; i < height; i++) {
-    // For each pixel in each row, if at top of img:
     for (int j = 0; j < width; j++) {
-      if (i == 0 && j == 0) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i + 1][j].rgbtRed + image_copy[i + 1][j + 1].rgbtRed) /
-            4.0);
+      int sumR = 0, sumG = 0, sumB = 0;
+      int count = 0;
 
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen +
-                   image_copy[i + 1][j + 1].rgbtGreen) /
-                  4.0);
-
-        image[i][j].rgbtBlue =
-            round((image_copy[i][j].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-                   image_copy[i + 1][j].rgbtBlue +
-                   image_copy[i + 1][j + 1].rgbtBlue)) /
-            4.0;
+      for (int di = -1; di <= 1; di++) {
+        int ni = i + di;
+        if (ni < 0 || ni >= height)
+          continue;
+        for (int dj = -1; dj <= 1; dj++) {
+          int nj = j + dj;
+          if (nj < 0 || nj >= width)
+            continue;
+          sumR += src[ni][nj].rgbtRed;
+          sumG += src[ni][nj].rgbtGreen;
+          sumB += src[ni][nj].rgbtBlue;
+          count++;
+        }
       }
-      // If current pixel is within top row, but not at corner:
-      else if (i == 0 && j < width - 1) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i + 1][j + 1].rgbtRed + image_copy[i + 1][j].rgbtRed +
-             image_copy[i + 1][j - 1].rgbtRed + image_copy[i][j - 1].rgbtRed) /
-            6.0);
 
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i + 1][j + 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen +
-                   image_copy[i + 1][j - 1].rgbtGreen +
-                   image_copy[i][j - 1].rgbtGreen) /
-                  6.0);
-
-        image[i][j].rgbtBlue = round(
-            (image_copy[i][j].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-             image_copy[i + 1][j + 1].rgbtBlue + image_copy[i + 1][j].rgbtBlue +
-             image_copy[i + 1][j - 1].rgbtBlue +
-             image_copy[i][j - 1].rgbtBlue) /
-            6.0);
-      }
-      // If current pixel is at top right corner of img:
-      else if (i == 0 && j == width - 1) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j - 1].rgbtRed +
-             image_copy[i + 1][j - 1].rgbtRed + image_copy[i + 1][j].rgbtRed) /
-            4.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j - 1].rgbtGreen +
-                   image_copy[i + 1][j - 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen) /
-                  4.0);
-
-        image[i][j].rgbtBlue =
-            round((image_copy[i][j].rgbtBlue + image_copy[i][j - 1].rgbtBlue +
-                   image_copy[i + 1][j - 1].rgbtBlue +
-                   image_copy[i + 1][j].rgbtBlue) /
-                  4.0);
-      }
-      // If current pixel is at leading edge of any inner row:
-      else if (i > 0 && i < height - 1 && j == 0) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i - 1][j].rgbtRed +
-             image_copy[i - 1][j + 1].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i + 1][j + 1].rgbtRed + image_copy[i + 1][j].rgbtRed) /
-            6.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i - 1][j].rgbtGreen +
-                   image_copy[i - 1][j + 1].rgbtGreen +
-                   image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i + 1][j + 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen) /
-                  6.0);
-
-        image[i][j].rgbtBlue = round(
-            (image_copy[i][j].rgbtBlue + image_copy[i - 1][j].rgbtBlue +
-             image_copy[i - 1][j + 1].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-             image_copy[i + 1][j + 1].rgbtBlue +
-             image_copy[i + 1][j].rgbtBlue) /
-            6.0);
-      }
-      // If current pixel is at trailing edge of any inner row:
-      else if (i > 0 && i < height - 1 && j == width - 1) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i - 1][j].rgbtRed +
-             image_copy[i - 1][j - 1].rgbtRed + image_copy[i][j - 1].rgbtRed +
-             image_copy[i + 1][j - 1].rgbtRed + image_copy[i + 1][j].rgbtRed) /
-            6.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i - 1][j].rgbtGreen +
-                   image_copy[i - 1][j - 1].rgbtGreen +
-                   image_copy[i][j - 1].rgbtGreen +
-                   image_copy[i + 1][j - 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen) /
-                  6.0);
-
-        image[i][j].rgbtBlue = round(
-            (image_copy[i][j].rgbtBlue + image_copy[i - 1][j].rgbtBlue +
-             image_copy[i - 1][j - 1].rgbtBlue + image_copy[i][j - 1].rgbtBlue +
-             image_copy[i + 1][j - 1].rgbtBlue +
-             image_copy[i + 1][j].rgbtBlue) /
-            6.0);
-      }
-      // If current pixel is at bottom left corner of img:
-      else if (i == height - 1 && j == 0) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i - 1][j + 1].rgbtRed + image_copy[i - 1][j].rgbtRed) /
-            4.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i - 1][j + 1].rgbtGreen +
-                   image_copy[i - 1][j].rgbtGreen) /
-                  4.0);
-
-        image[i][j].rgbtBlue =
-            round((image_copy[i][j].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-                   image_copy[i - 1][j + 1].rgbtBlue +
-                   image_copy[i - 1][j].rgbtBlue) /
-                  4.0);
-      }
-      // If current pixel is within bottom row, but not at corner:
-      else if (i == height - 1 && j < width - 1) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i - 1][j + 1].rgbtRed + image_copy[i - 1][j].rgbtRed +
-             image_copy[i - 1][j - 1].rgbtRed + image_copy[i][j - 1].rgbtRed) /
-            6.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i - 1][j + 1].rgbtGreen +
-                   image_copy[i - 1][j].rgbtGreen +
-                   image_copy[i - 1][j - 1].rgbtGreen +
-                   image_copy[i][j - 1].rgbtGreen) /
-                  6.0);
-
-        image[i][j].rgbtBlue = round(
-            (image_copy[i][j].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-             image_copy[i - 1][j + 1].rgbtBlue + image_copy[i - 1][j].rgbtBlue +
-             image_copy[i - 1][j - 1].rgbtBlue +
-             image_copy[i][j - 1].rgbtBlue) /
-            6.0);
-      }
-      // If current pixel is at bottom right corner of img:
-      else if (i == height - 1 && j == width - 1) {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j - 1].rgbtRed +
-             image_copy[i - 1][j - 1].rgbtRed + image_copy[i - 1][j].rgbtRed) /
-            4.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j - 1].rgbtGreen +
-                   image_copy[i - 1][j - 1].rgbtGreen +
-                   image_copy[i - 1][j].rgbtGreen) /
-                  4.0);
-
-        image[i][j].rgbtBlue =
-            round((image_copy[i][j].rgbtBlue + image_copy[i][j - 1].rgbtBlue +
-                   image_copy[i - 1][j - 1].rgbtBlue +
-                   image_copy[i - 1][j].rgbtBlue) /
-                  4.0);
-      }
-      // If current pixel is NOT at any edges or corners
-      else {
-        // set rgb values to average of surrouding pixels
-        image[i][j].rgbtRed = round(
-            (image_copy[i][j].rgbtRed + image_copy[i][j - 1].rgbtRed +
-             image_copy[i - 1][j - 1].rgbtRed + image_copy[i - 1][j].rgbtRed +
-             image_copy[i - 1][j + 1].rgbtRed + image_copy[i][j + 1].rgbtRed +
-             image_copy[i + 1][j + 1].rgbtRed + image_copy[i + 1][j].rgbtRed +
-             image_copy[i + 1][j - 1].rgbtRed) /
-            9.0);
-
-        image[i][j].rgbtGreen =
-            round((image_copy[i][j].rgbtGreen + image_copy[i][j - 1].rgbtGreen +
-                   image_copy[i - 1][j - 1].rgbtGreen +
-                   image_copy[i - 1][j].rgbtGreen +
-                   image_copy[i - 1][j + 1].rgbtGreen +
-                   image_copy[i][j + 1].rgbtGreen +
-                   image_copy[i + 1][j + 1].rgbtGreen +
-                   image_copy[i + 1][j].rgbtGreen +
-                   image_copy[i + 1][j - 1].rgbtGreen) /
-                  9.0);
-
-        image[i][j].rgbtBlue = round(
-            (image_copy[i][j].rgbtBlue + image_copy[i][j - 1].rgbtBlue +
-             image_copy[i - 1][j - 1].rgbtBlue + image_copy[i - 1][j].rgbtBlue +
-             image_copy[i - 1][j + 1].rgbtBlue + image_copy[i][j + 1].rgbtBlue +
-             image_copy[i + 1][j + 1].rgbtBlue + image_copy[i + 1][j].rgbtBlue +
-             image_copy[i + 1][j - 1].rgbtBlue) /
-            9.0);
-      }
+      image[i][j].rgbtRed = (BYTE)round((double)sumR / count);
+      image[i][j].rgbtGreen = (BYTE)round((double)sumG / count);
+      image[i][j].rgbtBlue = (BYTE)round((double)sumB / count);
     }
   }
 

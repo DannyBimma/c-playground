@@ -1,23 +1,31 @@
 /*
- * Routine: A problem-set from Harvard's CS50:
- * Author: DannyBimma
- * Copyright: (c) 2025 Technomancer Pirate Captain. All Rights Reserved.
+ * CS50 Filter (less)
+ *
+ * A command-line BMP image filter that applies one of four effects to a
+ * 24-bit uncompressed BMP 4.0 image and writes the result to a new file.
+ *
+ * Supported filters (flags):
+ *   -b  box blur
+ *   -g  grayscale
+ *   -r  horizontal reflection (mirror)
+ *   -s  sepia tone
+ *
+ * Usage: ./filter -[bgrs] infile.bmp outfile.bmp
  */
 
 #include "helpers.h"
 #include <getopt.h>
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-  // Define allowable filters
-  char *filters = "bgrs";
+  // Valid single-letter filter options (used with a leading '-')
+  const char *filters = "bgrs";
 
   // Get filter flag and check validity
   char filter = getopt(argc, argv, filters);
-  if (filter == '?') {
-    printf("Invalid filter.\n");
+  if (filter == '?' || filter == -1) {
+    printf("Invalid or missing filter.\n");
 
     return 1;
   }
@@ -36,20 +44,20 @@ int main(int argc, char *argv[]) {
     return 3;
   }
 
-  // Store filenames
+  // Store filenames (remaining args after getopt processing)
   char *infile = argv[optind];
   char *outfile = argv[optind + 1];
 
-  // Open input file
-  FILE *inptr = fopen(infile, "r");
+  // Open input BMP (binary mode)
+  FILE *inptr = fopen(infile, "rb");
   if (inptr == NULL) {
     printf("Could not open %s.\n", infile);
 
     return 4;
   }
 
-  // Open output file
-  FILE *outptr = fopen(outfile, "w");
+  // Open output BMP (binary mode)
+  FILE *outptr = fopen(outfile, "wb");
   if (outptr == NULL) {
     fclose(inptr);
     printf("Could not create %s.\n", outfile);
@@ -79,9 +87,8 @@ int main(int argc, char *argv[]) {
   int height = abs(bi.biHeight);
   int width = bi.biWidth;
 
-  // Allocate memory for image
-  RGBTRIPLE(*image)
-  [width] = calloc(height, width * sizeof(RGBTRIPLE));
+  // Allocate memory for image (height x width 2D array)
+  RGBTRIPLE(*image)[width] = calloc(height, width * sizeof(RGBTRIPLE));
   if (image == NULL) {
     printf("Not enough memory to store image.\n");
     fclose(outptr);
@@ -93,12 +100,12 @@ int main(int argc, char *argv[]) {
   // Determine padding for scanlines
   int padding = (4 - (width * sizeof(RGBTRIPLE)) % 4) % 4;
 
-  // Iterate over infile's scanlines
+  // Read all scanlines into memory
   for (int i = 0; i < height; i++) {
-    // Read row into pixel array
+    // Read one row of pixels
     fread(image[i], sizeof(RGBTRIPLE), width, inptr);
 
-    // Skip over padding
+    // Skip over input padding
     fseek(inptr, padding, SEEK_CUR);
   }
 
@@ -131,12 +138,12 @@ int main(int argc, char *argv[]) {
   // Write outfile's BITMAPINFOHEADER
   fwrite(&bi, sizeof(BITMAPINFOHEADER), 1, outptr);
 
-  // Write new pixels to outfile
+  // Write pixel data to outfile
   for (int i = 0; i < height; i++) {
-    // Write row to outfile
+    // Write one row of pixels
     fwrite(image[i], sizeof(RGBTRIPLE), width, outptr);
 
-    // Write padding at end of row
+    // Write padding bytes at end of row
     for (int k = 0; k < padding; k++) {
       fputc(0x00, outptr);
     }
