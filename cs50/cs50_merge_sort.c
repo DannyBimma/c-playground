@@ -56,6 +56,7 @@ void merge(int arr[], int l, int m, int r) {
       free(L);
     if (R != NULL)
       free(R);
+
     return;
   }
 
