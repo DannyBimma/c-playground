@@ -19,7 +19,13 @@ int main(void) {
   printf("Enter number of hours worked this week:\t");
   scanf("%d", &hrsWorked);
 
-  grossPay = hrsWorked * PAYRATE;
+  // Calc basic pay & overtime before taxes
+  if (hrsWorked > 40) {
+    int overTimeRate = PAYRATE * 1.5;
+    grossPay = hrsWorked * overTimeRate;
+  } else {
+    grossPay = hrsWorked * PAYRATE;
+  }
 
   printf("\nGross pay: %d\n", grossPay);
 
