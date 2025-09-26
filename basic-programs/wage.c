@@ -4,3 +4,12 @@
  * Author: DannyBimma
  * Copyright: (c) 2025 Technomancer Pirate Captain. All Rights Reserved.
  */
+
+#include <stdio.h>
+
+int main(void) {
+  int hrsWorked;
+  int taxes;
+  int grossPay;
+  int netPay;
+}
