@@ -7,9 +7,21 @@
 
 #include <stdio.h>
 
+#define PAYRATE 12.00
+
 int main(void) {
   int hrsWorked;
   int taxes;
   int grossPay;
   int netPay;
+
+  // Get the amount of hrs worked
+  printf("Enter number of hours worked this week:\t");
+  scanf("%d", &hrsWorked);
+
+  grossPay = hrsWorked * PAYRATE;
+
+  printf("\nGross pay: %d\n", grossPay);
+
+  return 0;
 }
