@@ -8,6 +8,8 @@
 #include <stdio.h>
 
 #define PAYRATE 12.00
+#define OVERTIME 40
+#define TIME_AND_A_HALF 1.5
 
 // Prototypes
 double calculate_tax(double wage);
@@ -23,9 +25,9 @@ int main(void) {
   scanf("%lf", &hrsWorked);
 
   // Calc basic pay & overtime before taxes
-  if (hrsWorked > 40) {
-    double overTimeRate = PAYRATE * 1.5;
-    grossPay = (40 * PAYRATE) + ((hrsWorked - 40) * overTimeRate);
+  if (hrsWorked > OVERTIME) {
+    double overTimeRate = PAYRATE * TIME_AND_A_HALF;
+    grossPay = (OVERTIME * PAYRATE) + ((hrsWorked - OVERTIME) * overTimeRate);
   } else {
     grossPay = hrsWorked * PAYRATE;
   }
