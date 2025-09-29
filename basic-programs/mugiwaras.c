@@ -26,10 +26,10 @@ int main(void) {
   enum mugiwaras chef = Sanji;
   enum mugiwaras sniper = Usopp;
 
-  printf("The Captain was the %dth member of the crew.\n", Luffy);
-  printf("The Navigator was the %dnd member of the crew.\n", Nami);
-  printf("The Chef was the %dth member of the crew.\n", Sanji);
-  printf("The Sniper was the %dth member of the crew.\n", Usopp);
+  printf("The Captain was the %dth member of the crew.\n", captain);
+  printf("The Navigator was the %dnd member of the crew.\n", navigator);
+  printf("The Chef was the %dth member of the crew.\n", chef);
+  printf("The Sniper was the %dth member of the crew.\n", sniper);
 
   return 0;
 }
