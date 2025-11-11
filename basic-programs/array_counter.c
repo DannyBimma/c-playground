@@ -1,6 +1,6 @@
 /*
  * Routine: A program that counts occurrences of each digit
- * (0-9 with the count matched to their respective array index,
+ * (0-9) with the count matched to their respective array index,
  * white space characters, and other misc characters from input.
  * Author: DannyBimma
  * Copyright: (c) 2025 Technomancer Pirate Captain. All Rights Reserved.
