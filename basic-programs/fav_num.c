@@ -3,6 +3,7 @@
  * Purpose: Find the square of your favourite number.
  * Copyright (c) 2025 DannyBimma. All Rights Reserved.
  */
+#include <math.h>
 #include <stdio.h>
 
 int main(void) {
@@ -12,6 +13,8 @@ int main(void) {
   printf("Please input your favourite number:\n");
   scanf("%d", &favNum);
 
+  printf("Your favourite number is apparently: %d\n", favNum);
+  printf("Your favourite number has a sqaure-root of: %f\n", sqrt(favNum));
   printf("Your favourite number squared is: %d\n", favNum * favNum);
   printf("\nProgram ran successfully with exit code: %d\n\n", successExit);
 
