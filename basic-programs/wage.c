@@ -1,7 +1,9 @@
 /*
  * Routine: A program that calculates the amount of money paid to the
  * user on a weekly basis.
+ *
  * Author: DannyBimma
+ *
  * Copyright: (c) 2025 Technomancer Pirate Captain. All Rights Reserved.
  */
 
@@ -23,6 +25,7 @@ int main(void) {
   double taxes;
   double grossPay;
   double netPay;
+  double overTimeRate;
 
   // Get the amount of hrs worked and validate
   for (;;) {
@@ -49,7 +52,7 @@ int main(void) {
     char *endptr = NULL;
     double val = strtod(buf, &endptr);
 
-    /*Comprehensive checks for robust input validation*/
+    // Implement robust input validation
     if (endptr == buf) {
       fprintf(stderr, "Invalid input: please enter a numeric value.\n");
       continue;
@@ -64,12 +67,12 @@ int main(void) {
            *endptr == '\r' || *endptr == '\v' || *endptr == '\f') {
       endptr++;
     }
-    // Gobbledegook dismissal
+    // Invalidate gobbledegook and gibberish
     if (*endptr != '\0') {
       fprintf(stderr, "Invalid input: unexpected characters after number.\n");
       continue;
     }
-    // Reality check for hours worked
+    // Invalidate impossibly insufficient and extraneous hrs
     if (val <= 0.0) {
       fprintf(stderr, "Invalid input: hours must be greater than 0.\n");
       continue;
@@ -85,9 +88,9 @@ int main(void) {
     break;
   }
 
-  // Calc basic pay & overtime before taxes
+  // Calc basic pay & overtime rate before taxes
   if (hrsWorked > OVERTIME) {
-    double overTimeRate = PAYRATE * TIME_AND_A_HALF;
+    overTimeRate = PAYRATE * TIME_AND_A_HALF;
     grossPay = (OVERTIME * PAYRATE) + ((hrsWorked - OVERTIME) * overTimeRate);
   } else {
     grossPay = hrsWorked * PAYRATE;
@@ -123,7 +126,7 @@ double calculate_tax(double wage) {
     return tax;
   }
 
-  // Rest at 25%
+  // The remainder at 25%
   tax += (wage - 450) * 0.25;
 
   return tax;
