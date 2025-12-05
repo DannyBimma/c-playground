@@ -10,3 +10,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+int main(void) {
+  // Generate random num between 0-420 inclusive
+  srand(time(0));
+
+  int min = 0;
+  int max = 420;
+  int range = (max - min) + 1;
+
+  int random_num = (rand() % range) + min;
+
+  printf("Random number between 0-420 inclusive: %d\n", random_num);
+}
